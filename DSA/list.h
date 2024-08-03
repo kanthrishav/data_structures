@@ -259,7 +259,13 @@ public:
 		}
 	}
 
-	void swapNodes(int a, int b){}
+	void swapNodes(NodeLL * n0, NodeLL* n1, NodeLL* n2){
+		NodeLL* next = n2->next;
+		n2->next = n1;
+		n1->next = next;
+		n0->next = n2;
+		return;
+	}
 	void reverseList() {
 		NodeLL* ptr = head;
 		NodeLL * curr, * prev, * next;
@@ -274,15 +280,289 @@ public:
 		}
 		head = prev;
 	}
-	void reverseListInGroupsOf(int n) {}
-	int length() {}
-	void rotateFromStartToEndBy(int n) {}
-	void rotateFromEndToStartBy(int n) {}
-	NodeLL* splitListInParts(int parts) {}
-	NodeLL* splitIntoOddEvenLists() {}
-	void removeDuplicates() {}
-	void removeDuplicatesFromSortedList() {}
-	void sortList() {}
+	int length() {
+		NodeLL* ptr = head;
+		int count = 0;
+		while (ptr != nullptr) {
+			count += 1;
+			ptr = ptr->next;
+		}
+		return count;
+	}
+	void rotateFromStartToEndBy(int n) {
+		NodeLL* ptr = head;
+		int count = 0;
+		int len = this->length();
+		while (count < (len - n - 1)) {
+			ptr = ptr->next;
+			count++;
+		}
+		NodeLL* splitEnd = ptr;
+		ptr = ptr->next;
+		NodeLL* ptr2 = ptr;
+		while (ptr2->next != nullptr) {
+			ptr2 = ptr2->next;
+		}
+		ptr2->next = head;
+		splitEnd->next = nullptr;
+		head = ptr;
+		return;
+	}
+	void rotateFromEndToStartBy(int n) {
+		NodeLL* ptr = head;
+		int count = 0;
+		int len = this->length();
+		while (count < (n - 1)) {
+			ptr = ptr->next;
+			count++;
+		}
+		NodeLL* splitEnd = ptr;
+		ptr = ptr->next;
+		NodeLL* ptr2 = ptr;
+		while (ptr2->next != nullptr) {
+			ptr2 = ptr2->next;
+		}
+		ptr2->next = head;
+		splitEnd->next = nullptr;
+		head = ptr;
+		return;
+	}
+	NodeLL* splitListInTwo(int index) {
+		NodeLL* ptr = head;
+		int count = 0;
+		while (count < index) {
+			ptr = ptr->next;
+			count++;
+		}
+		NodeLL* otherList = ptr->next;
+		ptr->next = nullptr;
+		return otherList;
+	}
+	NodeLL* splitIntoOddEvenLists() {
+		NodeLL* ptr = head;
+		NodeLL* even;
+		NodeLL* odd;
+		NodeLL* firstEven;
+		bool firstEvenBool = false;
+		NodeLL* firstOdd;
+		bool firstOddBool = false;
+		while (ptr != nullptr) {
+			if (ptr->info % 2 == 0) {
+				if (!firstEvenBool) {
+					firstEven = ptr;
+					even = firstEven;
+					ptr = ptr->next;
+					even->next = nullptr;
+					firstEvenBool = true;
+				}
+				else {
+					even->next = ptr;
+					ptr = ptr->next;
+					even = even->next;
+					even->next = nullptr;
+				}
+			}
+			else {
+				if (!firstOddBool) {
+					firstOdd = ptr;
+					odd = firstOdd;
+					ptr = ptr->next;
+					odd->next = nullptr;
+					firstOddBool = true;
+				}
+				else {
+					odd->next = ptr;
+					ptr = ptr->next;
+					odd = odd->next;
+					odd->next = nullptr;
+				}
+			}
+		}
+		head = firstOdd;
+		return firstEven;
+	}
+	void removeDuplicates() {
+		NodeLL* ptr = head;
+		NodeLL* ptr2;
+		NodeLL* temp;
+		int count;
+
+		while (ptr != nullptr) {
+			count = 0;
+			ptr2 = ptr;
+			while (ptr2->next != nullptr) {
+				if (ptr2->info == ptr->info) {
+					count++;
+				}				
+				ptr2 = ptr2->next;
+			}
+
+			if (count > 1) {
+				ptr2 = ptr;
+				while (ptr2->next != nullptr) {
+					if (ptr2->next->info == ptr->info) {
+						temp = ptr2->next;
+						ptr2->next = ptr2->next->next;
+						temp->next = nullptr;
+						delete temp;
+					}
+					else {
+						ptr2 = ptr2->next;
+					}
+				}
+			}
+			ptr = ptr->next;
+		}
+	}
+	void removeDuplicatesFromSortedList() {
+		NodeLL* ptr = head;
+		NodeLL* ptr2;
+		NodeLL* temp;
+		int count;
+		while (ptr != nullptr) {
+			count = 0;
+			ptr2 = ptr;
+			while (ptr2->next != nullptr) {
+				if (ptr2->info == ptr->info) {
+					count++;
+				}
+				ptr2 = ptr2->next;
+			}
+
+			if (count > 1) {
+				ptr2 = ptr;
+				while (ptr2->next->info == ptr->info) {
+					temp = ptr2->next;
+					ptr2->next = ptr2->next->next;
+					temp->next = nullptr;
+					delete temp;
+				}
+			}
+			ptr = ptr->next;
+		}
+	}
+	void sortListBubble(char a_) {
+		NodeLL* ptr = head;
+		NodeLL* startPtr = head;
+		int temp;
+		bool pass = true;
+		int swapCount = 0;
+		while (pass) {
+			swapCount = 0;
+			ptr = startPtr;
+
+			while (ptr->next != nullptr) {
+				if (a_ == 'a') {
+					if (ptr->info > ptr->next->info) {
+						temp = ptr->info;
+						ptr->info = ptr->next->info;
+						ptr->next->info = temp;
+						swapCount += 1;
+					}
+				}
+				else {
+					if (ptr->info < ptr->next->info) {
+						temp = ptr->info;
+						ptr->info = ptr->next->info;
+						ptr->next->info = temp;
+						swapCount += 1;
+					}
+				}
+				ptr = ptr->next;
+			}
+			pass = (swapCount > 0) ? true : false;
+		}		
+	}
+	void sortListSelection(char a_) {
+		NodeLL* ptr = head;
+		NodeLL* startPtr = head;
+		int temp;
+		bool pass = true;
+		int swapCount = 0;
+		int min, max;
+		NodeLL* minPtr, * maxPtr;
+		minPtr = head;
+		maxPtr = head;
+		NodeLL* lastPtr = head;
+		while (lastPtr->next != nullptr) {
+			lastPtr = lastPtr->next;
+		}
+		while (startPtr!=lastPtr) {
+			ptr = startPtr;
+			min = 100000;
+			max = -100000;
+			while (ptr != nullptr) {
+				if (a_ == 'a') {
+					if (min > ptr->info) {
+						min = ptr->info;
+						minPtr = ptr;
+					}
+				}
+				else {
+					if (max < ptr->info) {
+						max = ptr->info;
+						maxPtr = ptr;
+					}
+				}
+				ptr = ptr->next;
+			}
+
+			if (a_ == 'a') {
+				temp = minPtr->info;
+				minPtr->info = startPtr->info;
+			}
+			else {
+				temp = maxPtr->info;
+				maxPtr->info = startPtr->info;
+			}
+			startPtr->info = temp;
+			startPtr = startPtr->next;
+		}
+	}
+	void sortListInsertion(char a_) {
+		NodeLL* ptr = head;
+		NodeLL* subArrayEndPtr = head->next;
+		int temp;
+		while (subArrayEndPtr != nullptr) {
+			ptr = head;
+			while (ptr != subArrayEndPtr) {
+				if (a_ == 'a') {
+					if ((ptr->info < subArrayEndPtr->info)
+						&& (ptr->next->info > subArrayEndPtr->info)) {
+
+						temp = ptr->next->info;
+						ptr->next->info = subArrayEndPtr->info;
+						subArrayEndPtr->info = temp;
+					}
+					else if (ptr->info > subArrayEndPtr->info) {
+						temp = ptr->info;
+						ptr->info = subArrayEndPtr->info;
+						subArrayEndPtr->info = temp;
+					}
+				}
+				else {
+					if ((ptr->info > subArrayEndPtr->info)
+						&& (ptr->next->info < subArrayEndPtr->info)) {
+
+						temp = ptr->next->info;
+						ptr->next->info = subArrayEndPtr->info;
+						subArrayEndPtr->info = temp;
+					}
+					else if (ptr->info < subArrayEndPtr->info) {
+						temp = ptr->info;
+						ptr->info = subArrayEndPtr->info;
+						subArrayEndPtr->info = temp;
+					}
+				}
+				ptr = ptr->next;
+			}
+			subArrayEndPtr = subArrayEndPtr->next;
+		}
+		
+	}
+	void sortListMerge(char a_) {
+	
+	}
 	NodeLL * mergeLists(NodeLL* l1, NodeLL* l2) {}
 
 	NodeLL* findIntersection(NodeLL& l1, NodeLL* l2) {}
