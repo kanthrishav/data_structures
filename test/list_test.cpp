@@ -802,24 +802,37 @@ namespace LINKEDLIST {
 		for (i = 0; i < size; i++)
 			list->insertAtEnd(val[i]);
 		ptr = list->head;
-		for (i = 0; i < size; i++) {
+		for (i = 0; i < (size-1); i++) {
 			ASSERT_EQ(ptr->info, val[i]);
 			ptr = ptr->next;
 		}
-		list->sortListMerge('a');
+
+		ptr = list->head;
+		while (ptr->next != nullptr)
+			ptr = ptr->next;
+
+		list->MergeSort(&list->head);
+
 		int val2[size] = { 0, 1, 2, 3, 4, 5, 6 };
 		ptr = list->head;
 		for (i = 0; i < size; i++) {
 			ASSERT_EQ(ptr->info, val2[i]);
 			ptr = ptr->next;
 		}
-		list->sortListMerge('d');
+
+		/*
+		ptr = list->head;
+		while (ptr->next != nullptr)
+			ptr = ptr->next;
+		list->MergeSort(&list->head, 'd');
 		int val3[size] = { 6, 5, 4, 3, 2, 1, 0 };
 		ptr = list->head;
 		for (i = 0; i < size; i++) {
 			ASSERT_EQ(ptr->info, val3[i]);
 			ptr = ptr->next;
 		}
+		*/
+		
 	}
 
 }

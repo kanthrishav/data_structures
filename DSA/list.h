@@ -37,7 +37,7 @@ public:
 		}
 		std::cout << std::endl;
 	}
-	
+
 	void insertAtStart(int n) {
 		NodeLL* ptr = new NodeLL;
 		ptr->info = n;
@@ -60,7 +60,7 @@ public:
 	bool insertAfter(int n, int after) {
 		NodeLL* ptr = head;
 		bool found = false;
-		while (ptr!=nullptr) {
+		while (ptr != nullptr) {
 			if (ptr->info == after) {
 				found = true;
 				break;
@@ -101,7 +101,7 @@ public:
 	}
 	void deleteAtEnd() {
 		NodeLL* ptr = head;
-		
+
 		if (ptr->next != nullptr) {
 			while (ptr->next->next != nullptr) {
 				ptr = ptr->next;
@@ -114,7 +114,7 @@ public:
 			delete ptr;
 			head = nullptr;
 		}
-			
+
 	}
 	bool deleteAfter(int after) {
 		NodeLL* ptr = head;
@@ -259,7 +259,7 @@ public:
 		}
 	}
 
-	void swapNodes(NodeLL * n0, NodeLL* n1, NodeLL* n2){
+	void swapNodes(NodeLL* n0, NodeLL* n1, NodeLL* n2) {
 		NodeLL* next = n2->next;
 		n2->next = n1;
 		n1->next = next;
@@ -268,9 +268,9 @@ public:
 	}
 	void reverseList() {
 		NodeLL* ptr = head;
-		NodeLL * curr, * prev, * next;
+		NodeLL* curr, * prev, * next;
 		prev = nullptr;
-		
+
 		while (ptr != nullptr) {
 			curr = ptr;
 			next = ptr->next;
@@ -393,7 +393,7 @@ public:
 			while (ptr2->next != nullptr) {
 				if (ptr2->info == ptr->info) {
 					count++;
-				}				
+				}
 				ptr2 = ptr2->next;
 			}
 
@@ -471,7 +471,7 @@ public:
 				ptr = ptr->next;
 			}
 			pass = (swapCount > 0) ? true : false;
-		}		
+		}
 	}
 	void sortListSelection(char a_) {
 		NodeLL* ptr = head;
@@ -487,7 +487,7 @@ public:
 		while (lastPtr->next != nullptr) {
 			lastPtr = lastPtr->next;
 		}
-		while (startPtr!=lastPtr) {
+		while (startPtr != lastPtr) {
 			ptr = startPtr;
 			min = 100000;
 			max = -100000;
@@ -558,12 +558,65 @@ public:
 			}
 			subArrayEndPtr = subArrayEndPtr->next;
 		}
-		
+
 	}
-	void sortListMerge(char a_) {
-	
+	NodeLL* SortedMerge(NodeLL* first, NodeLL* second, char a_)
+	{
+		NodeLL* result = NULL;
+
+		if (first == NULL)
+			return (second);
+		else if (second == NULL)
+			return (first);
+
+		if (first->info <= second->info) {
+			result = first;
+			result->next = SortedMerge(first->next, second, a_);
+		}
+		else {
+			result = second;
+			result->next = SortedMerge(first, second->next, a_);
+		}
+		return (result);
 	}
-	NodeLL * mergeLists(NodeLL* l1, NodeLL* l2) {}
+
+	void splitList(NodeLL* source, NodeLL** firstRef,
+		NodeLL** secondRef)
+	{
+		NodeLL* slow = source;
+		NodeLL* fast = source->next;
+
+		while (fast != NULL) {
+			fast = fast->next;
+			if (fast != NULL) {
+				slow = slow->next;
+				fast = fast->next;
+			}
+		}
+
+		*firstRef = source;
+		*secondRef = slow->next;
+		slow->next = NULL;
+	}
+
+	void MergeSort(NodeLL** headRef, char a_ = 'a')
+	{
+		NodeLL* head = *headRef;
+		NodeLL* first;
+		NodeLL* second;
+
+		if ((head == NULL) || (head->next == NULL)) {
+			return;
+		}
+
+		splitList(head, &first, &second);
+
+		MergeSort(&first);
+		MergeSort(&second);
+
+		*headRef = SortedMerge(first, second, a_);
+	}
+
 
 	NodeLL* findIntersection(NodeLL& l1, NodeLL* l2) {}
 	bool findCycles() {}
