@@ -811,7 +811,7 @@ namespace LINKEDLIST {
 		while (ptr->next != nullptr)
 			ptr = ptr->next;
 
-		list->MergeSort(&list->head);
+		list->sortListMerge(&list->head);
 
 		int val2[size] = { 0, 1, 2, 3, 4, 5, 6 };
 		ptr = list->head;
@@ -824,7 +824,7 @@ namespace LINKEDLIST {
 		ptr = list->head;
 		while (ptr->next != nullptr)
 			ptr = ptr->next;
-		list->MergeSort(&list->head, 'd');
+		list->sortListMerge(&list->head, 'd');
 		int val3[size] = { 6, 5, 4, 3, 2, 1, 0 };
 		ptr = list->head;
 		for (i = 0; i < size; i++) {

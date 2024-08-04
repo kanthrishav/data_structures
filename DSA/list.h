@@ -441,6 +441,7 @@ public:
 			ptr = ptr->next;
 		}
 	}
+	
 	void sortListBubble(char a_) {
 		NodeLL* ptr = head;
 		NodeLL* startPtr = head;
@@ -579,9 +580,7 @@ public:
 		}
 		return (result);
 	}
-
-	void splitList(NodeLL* source, NodeLL** firstRef,
-		NodeLL** secondRef)
+	void splitList(NodeLL* source, NodeLL** firstRef, NodeLL** secondRef)
 	{
 		NodeLL* slow = source;
 		NodeLL* fast = source->next;
@@ -598,8 +597,7 @@ public:
 		*secondRef = slow->next;
 		slow->next = NULL;
 	}
-
-	void MergeSort(NodeLL** headRef, char a_ = 'a')
+	void sortListMerge(NodeLL** headRef, char a_ = 'a')
 	{
 		NodeLL* head = *headRef;
 		NodeLL* first;
@@ -611,12 +609,13 @@ public:
 
 		splitList(head, &first, &second);
 
-		MergeSort(&first);
-		MergeSort(&second);
+		sortListMerge(&first);
+		sortListMerge(&second);
 
 		*headRef = SortedMerge(first, second, a_);
 	}
-
+	void sortListQuick() {}
+	void sortListHeap() {}
 
 	NodeLL* findIntersection(NodeLL& l1, NodeLL* l2) {}
 	bool findCycles() {}
