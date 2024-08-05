@@ -23,11 +23,39 @@ public:
 	}
 };
 
+class NodeLL2 {
+public:
+	int info1;
+	int info2;
+	NodeLL2* next;
+	NodeLL2() {
+		info1 = 0;
+		info2 = 0;
+		next = NULL;
+	}
+	NodeLL2(int n1, int n2) {
+		info1 = n1;
+		info2 = n2;
+		next = NULL;
+	}
+	NodeLL2(int n1, int n2, NodeLL2* ptrNext) {
+		info1 = n1;
+		info2 = n2;
+		next = ptrNext;
+	}
+	~NodeLL2() {
+		delete next;
+	}
+};
+
+
 class LinearLL {
 public:
 	NodeLL* head;
+	NodeLL2* head2;
 	LinearLL() {
-		head = NULL;
+		head = nullptr;
+		head2 = nullptr;
 	}
 	void print() {
 		NodeLL* ptr = head;
@@ -617,16 +645,138 @@ public:
 	void sortListQuick() {}
 	void sortListHeap() {}
 
-	NodeLL* findIntersection(NodeLL& l1, NodeLL* l2) {}
-	bool findCycles() {}
-	NodeLL* findCentre() {}
-	int findMin() {}
-	int findMax() {}
-	int* findFrequencyOfNodes() {}
+	NodeLL* findIntersection(NodeLL* head1, NodeLL* head2) {
+		NodeLL* ptr1 = head1;
+		NodeLL* ptr2;
+		bool sameValue;
+		NodeLL* intersectionPtr;
+		bool firstEntry = false;
+		int count = 0;
+		int countCommon = 0;
+		int entryCount = 0;
+		while (ptr1 != nullptr) {
+			ptr2 = head2;
+			while (ptr2 != nullptr) {
+				sameValue = (ptr1->info == ptr2->info) ? true : false;
+				if (!firstEntry && sameValue) {
+					intersectionPtr = ptr2;
+					entryCount++;
+				}
+				else if (sameValue) {
+					entryCount++;
+					countCommon++;
+				}
+				count++;
+				ptr2 = ptr2->next;
+			}
+			if (countCommon == (entryCount - 1)) {
+				return intersectionPtr;
+				break;
+			}
+			ptr1 = ptr1->next;
+		}
+		return nullptr;
+	}
+	bool findCycles() {
+		
+		NodeLL* slow = head;
+		NodeLL* fast = head;
+		while ((fast->next != nullptr) && (fast != nullptr)) {
+			slow = slow->next;
+			fast = fast->next->next;
+			if (slow == fast) {
+				return true;
+			}
+		}
 
-	bool checkPallindrome() {}
-	bool checkDuplicates() {}
+		return false;
+	}
+	NodeLL* findCentre() {
+		NodeLL* slow = head;
+		NodeLL* fast = head->next;
+		while (fast != NULL) {
+			fast = fast->next;
+			if (fast != NULL) {
+				slow = slow->next;
+				fast = fast->next;
+			}
+		}
+		return slow;
+	}
+	int* findFrequencyOfNodes() {
+		int* arr = new int[10]();
+		NodeLL* ptr = head;
+		while (ptr != nullptr) {
+			arr[ptr->info]++;
+			ptr = ptr->next;
+		}
 
-	int addPolynomials(NodeLL* l1, NodeLL* l2) {}
+		return arr;
+	}
+	bool checkPallindrome() {
+		NodeLL* centrePtr = findCentre();
+		NodeLL* mainHead = head;
+		head = centrePtr;
+		reverseList();
+		NodeLL* ptr1 = head;
+		NodeLL* ptr2 = mainHead;
+		bool continuousChain = true;
+		while ((ptr1 != nullptr) && (ptr2 != centrePtr)) {
+			continuousChain &= (ptr1->info == ptr2->info);
+			if (!continuousChain) {
+				return false;
+			}
+			ptr1 = ptr1->next;
+			ptr2 = ptr2->next;
+		}
+		return true;
+	}
+
+	NodeLL2* addPolynomials(NodeLL2* l1, NodeLL2* l2) {
+		NodeLL2* addedPtr = new NodeLL2;
+		NodeLL2* addedPtrHead = addedPtr;
+		int power;
+		int coeff1;
+		int coeff2;
+		for (power = 0; power < 10; power++) {
+			NodeLL2* ptr1 = l1;
+			NodeLL2* ptr2 = l2;
+			coeff1 = -100;
+			coeff2 = -100;
+			while (ptr1 != nullptr) {
+				if (power == ptr1->info2) {
+					coeff1 = ptr1->info1;
+					break;
+				}
+				ptr1 = ptr1->next;
+			}
+			while (ptr2 != nullptr) {
+				if (power == ptr2->info2) {
+					coeff2 = ptr2->info1;
+					break;
+				}
+				ptr2 = ptr2->next;
+			}
+			if ((coeff1 != -100) && (coeff2 != -100)) {
+				addedPtr->info1 = coeff1 + coeff2;
+				addedPtr->info2 = power;
+				addedPtr->next = new NodeLL2;
+				addedPtr = addedPtr->next;
+			}
+			else if (coeff1 != -100) {
+				addedPtr->info1 = coeff1;
+				addedPtr->info2 = power;
+				addedPtr->next = new NodeLL2;
+				addedPtr = addedPtr->next;
+			}
+			else if (coeff2 != -100) {
+				addedPtr->info1 = coeff2;
+				addedPtr->info2 = power;
+				addedPtr->next = new NodeLL2;
+				addedPtr = addedPtr->next;
+			}
+		}
+		return addedPtrHead;
+	}
 };
 

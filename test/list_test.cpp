@@ -835,4 +835,167 @@ namespace LINKEDLIST {
 		
 	}
 
+
+	class CUSTOM : public LL {};
+
+	TEST_F(CUSTOM, findIntersection) {
+		
+		int const size = 7;
+		int val[size] = { 5, 6, 2, 0, 1, 4, 3 };
+		int i;
+		for (i = 0; i < size; i++)
+			list->insertAtEnd(val[i]);
+		ptr = list->head;
+		for (i = 0; i < size; i++) {
+			ASSERT_EQ(ptr->info, val[i]);
+			ptr = ptr->next;
+		}
+		
+		ptr = list->head;
+		int intersectionValue = 2;
+		NodeLL* intersectionPtr;
+		while (ptr != nullptr) {
+			if (ptr->info == intersectionValue) {
+				intersectionPtr = ptr;
+				break;
+			}
+			ptr = ptr->next;
+		}
+
+		int val2[size] = { 7, 8, intersectionValue, 0, 1, 4, 3 };
+		LinearLL* list2 = new LinearLL;
+		list2->insertAtEnd(val2[0]);
+		list2->insertAtEnd(val2[1]);
+		list2->head->next->next = ptr;
+		ptr = list2->head;
+		for (i = 0; i < size; i++) {
+			ASSERT_EQ(ptr->info, val2[i]);
+			ptr = ptr->next;
+		}
+
+		NodeLL * intersectionNode = list->findIntersection(list->head, list2->head);
+		ASSERT_EQ(intersectionNode->info, intersectionValue);
+
+		int val3[5] = { 9, 10, 11, 12, 13 };
+		LinearLL* list3 = new LinearLL;
+		for (i = 0; i < size; i++)
+			list3->insertAtEnd(val3[i]);
+		intersectionNode = list3->findIntersection(list3->head, list2->head);
+		ASSERT_EQ(intersectionNode, nullptr);
+		intersectionNode = list3->findIntersection(list3->head, list->head);
+		ASSERT_EQ(intersectionNode, nullptr);
+
+	}
+	TEST_F(CUSTOM, findCycles) {
+
+		int const size = 7;
+		int val[size] = { 5, 6, 2, 0, 1, 4, 3 };
+		int i;
+		for (i = 0; i < size; i++)
+			list->insertAtEnd(val[i]);
+		NodeLL * ptr = list->head;
+		NodeLL* ptr2;
+		for (i = 0; i < (size-1); i++) {
+			if (ptr->info == 0)
+				ptr2 = ptr;
+			ASSERT_EQ(ptr->info, val[i]);
+			ptr = ptr->next;
+		}
+		bool found = list->findCycles();
+		ASSERT_EQ(found, false);
+
+		ptr->next = ptr2;
+
+		found = list->findCycles();
+		ASSERT_EQ(found, true);
+	}
+	TEST_F(CUSTOM, findCentre) {
+		int const size = 7;
+		int val[size] = { 5, 6, 2, 0, 1, 4, 3 };
+		int i;
+		for (i = 0; i < size; i++)
+			list->insertAtEnd(val[i]);
+		NodeLL* ptr = list->head;
+		for (i = 0; i < (size - 1); i++) {
+			ASSERT_EQ(ptr->info, val[i]);
+			ptr = ptr->next;
+		}
+		NodeLL * centre = list->findCentre();
+		ASSERT_EQ(centre->info, 0);
+	}
+	TEST_F(CUSTOM, findValueFrequency) {
+		int val[15] = { 0, 5, 0, 6, 2, 0, 1, 6, 1, 1, 4, 3, 3, 3, 3 };
+		int i;
+		for (i = 0; i < 15; i++)
+			list->insertAtEnd(val[i]);
+		NodeLL* ptr = list->head;
+		for (i = 0; i < 15; i++) {
+			ASSERT_EQ(ptr->info, val[i]);
+			ptr = ptr->next;
+		}
+		int * pFreq = list->findFrequencyOfNodes();
+		ASSERT_EQ(pFreq[0], 3);
+		ASSERT_EQ(pFreq[1], 3);
+		ASSERT_EQ(pFreq[2], 1);
+		ASSERT_EQ(pFreq[3], 4);
+		ASSERT_EQ(pFreq[4], 1);
+		ASSERT_EQ(pFreq[5], 1);
+		ASSERT_EQ(pFreq[6], 2);
+		ASSERT_EQ(pFreq[7], 0);
+		ASSERT_EQ(pFreq[8], 0);
+		ASSERT_EQ(pFreq[9], 0);
+	}
+	TEST_F(CUSTOM, checkPallindrome) {
+		int val[8] = { 0, 5, 0, 6, 6, 0, 5, 0 };
+		int i;
+		for (i = 0; i < 8; i++)
+			list->insertAtEnd(val[i]);
+		NodeLL* ptr = list->head;
+		for (i = 0; i < 8; i++) {
+			ASSERT_EQ(ptr->info, val[i]);
+			ptr = ptr->next;
+		}
+		bool found = list->checkPallindrome();
+		ASSERT_EQ(found, true);
+
+		val[5] = 1;
+		found = list->checkPallindrome();
+		ASSERT_EQ(found, false);
+	}
+	TEST_F(CUSTOM, addPolynomials) {
+		int coeff1[4] = { 0, 5, 0, 6};
+		int pow1[4] = { 0, 1, 2, 3 };
+		int coeff2[2] = { 4, -3 };
+		int pow2[2] = { 1, 2 };
+
+		LinearLL* head1 = new LinearLL;
+		LinearLL* head2 = new LinearLL;
+
+		head1->head2 = new NodeLL2;
+		head2->head2 = new NodeLL2;
+		NodeLL2* ptr1 = head1->head2;
+		NodeLL2* ptr2 = head2->head2;
+
+		for (int i = 0; i < 4; i++) {
+			ptr1->info1 = coeff1[i];
+			ptr1->info2 = pow1[i];
+			ptr1->next = new NodeLL2;
+			ptr1 = ptr1->next;
+		}
+		for (int i = 0; i < 2; i++) {
+			ptr2->info1 = coeff2[i];
+			ptr2->info2 = pow2[i];
+			ptr2->next = new NodeLL2;
+			ptr2 = ptr2->next;
+		}
+		NodeLL2 * addedPtr = list->addPolynomials(head1->head2, head2->head2);
+		ASSERT_EQ(addedPtr->info1, 0);
+		addedPtr = addedPtr->next;
+		ASSERT_EQ(addedPtr->info1, 9);
+		addedPtr = addedPtr->next;
+		ASSERT_EQ(addedPtr->info1, -3);
+		addedPtr = addedPtr->next;
+		ASSERT_EQ(addedPtr->info1, 6);
+	}
+
 }
