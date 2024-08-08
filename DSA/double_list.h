@@ -296,8 +296,11 @@ public:
 	void swapNodes(NodeDL* n0, NodeDL* n1, NodeDL* n2) {
 		NodeDL* next = n2->next;
 		n2->next = n1;
+		n1->prev = n2;
 		n1->next = next;
 		n0->next = n2;
+		n2->prev = n0;
+
 		return;
 	}
 	void reverseList() {
@@ -306,13 +309,15 @@ public:
 		prev = nullptr;
 
 		while (ptr != nullptr) {
-			curr = ptr;
-			next = ptr->next;
-			curr->next = prev;
-			ptr = next;
-			prev = curr;
+			ptr = ptr->next;
 		}
-		head = prev;
+		NodeDL * head2 = ptr;
+		while (ptr != head->next) {
+			ptr->next = ptr->prev;
+			ptr = ptr->next;
+		}
+		ptr->next = head;
+		head->next = ptr;
 	}
 	int length() {
 		NodeDL* ptr = head;
@@ -437,7 +442,10 @@ public:
 					if (ptr2->next->info == ptr->info) {
 						temp = ptr2->next;
 						ptr2->next = ptr2->next->next;
+						if (ptr2->next != nullptr)
+							ptr2->next->prev = ptr2;
 						temp->next = nullptr;
+						temp->prev = nullptr;
 						delete temp;
 					}
 					else {
@@ -468,11 +476,277 @@ public:
 				while (ptr2->next->info == ptr->info) {
 					temp = ptr2->next;
 					ptr2->next = ptr2->next->next;
+					if (ptr2->next != nullptr)
+						ptr2->next->prev = ptr2;
 					temp->next = nullptr;
+					temp->prev = nullptr;
 					delete temp;
 				}
 			}
 			ptr = ptr->next;
 		}
 	}
+
+	void sortListBubble(char a_) {
+		NodeDL* ptr = head;
+		NodeDL* startPtr = head;
+		int temp;
+		bool pass = true;
+		int swapCount = 0;
+		while (pass) {
+			swapCount = 0;
+			ptr = startPtr;
+
+			while (ptr->next != nullptr) {
+				if (a_ == 'a') {
+					if (ptr->info > ptr->next->info) {
+						temp = ptr->info;
+						ptr->info = ptr->next->info;
+						ptr->next->info = temp;
+						swapCount += 1;
+					}
+				}
+				else {
+					if (ptr->info < ptr->next->info) {
+						temp = ptr->info;
+						ptr->info = ptr->next->info;
+						ptr->next->info = temp;
+						swapCount += 1;
+					}
+				}
+				ptr = ptr->next;
+			}
+			pass = (swapCount > 0) ? true : false;
+		}
+	}
+	void sortListSelection(char a_) {
+		NodeDL* ptr = head;
+		NodeDL* startPtr = head;
+		int temp;
+		bool pass = true;
+		int swapCount = 0;
+		int min, max;
+		NodeDL* minPtr, * maxPtr;
+		minPtr = head;
+		maxPtr = head;
+		NodeDL* lastPtr = head;
+		while (lastPtr->next != nullptr) {
+			lastPtr = lastPtr->next;
+		}
+		while (startPtr != lastPtr) {
+			ptr = startPtr;
+			min = 100000;
+			max = -100000;
+			while (ptr != nullptr) {
+				if (a_ == 'a') {
+					if (min > ptr->info) {
+						min = ptr->info;
+						minPtr = ptr;
+					}
+				}
+				else {
+					if (max < ptr->info) {
+						max = ptr->info;
+						maxPtr = ptr;
+					}
+				}
+				ptr = ptr->next;
+			}
+
+			if (a_ == 'a') {
+				temp = minPtr->info;
+				minPtr->info = startPtr->info;
+			}
+			else {
+				temp = maxPtr->info;
+				maxPtr->info = startPtr->info;
+			}
+			startPtr->info = temp;
+			startPtr = startPtr->next;
+		}
+	}
+	void sortListInsertion(char a_) {
+		NodeDL* ptr = head;
+		NodeDL* subArrayEndPtr = head->next;
+		int temp;
+		while (subArrayEndPtr != nullptr) {
+			ptr = head;
+			while (ptr != subArrayEndPtr) {
+				if (a_ == 'a') {
+					if ((ptr->info < subArrayEndPtr->info)
+						&& (ptr->next->info > subArrayEndPtr->info)) {
+
+						temp = ptr->next->info;
+						ptr->next->info = subArrayEndPtr->info;
+						subArrayEndPtr->info = temp;
+					}
+					else if (ptr->info > subArrayEndPtr->info) {
+						temp = ptr->info;
+						ptr->info = subArrayEndPtr->info;
+						subArrayEndPtr->info = temp;
+					}
+				}
+				else {
+					if ((ptr->info > subArrayEndPtr->info)
+						&& (ptr->next->info < subArrayEndPtr->info)) {
+
+						temp = ptr->next->info;
+						ptr->next->info = subArrayEndPtr->info;
+						subArrayEndPtr->info = temp;
+					}
+					else if (ptr->info < subArrayEndPtr->info) {
+						temp = ptr->info;
+						ptr->info = subArrayEndPtr->info;
+						subArrayEndPtr->info = temp;
+					}
+				}
+				ptr = ptr->next;
+			}
+			subArrayEndPtr = subArrayEndPtr->next;
+		}
+
+	}
+	NodeDL* SortedMerge(NodeDL* first, NodeDL* second, char a_)
+	{
+		NodeDL* result = NULL;
+
+		if (first == NULL)
+			return (second);
+		else if (second == NULL)
+			return (first);
+
+		if (first->info <= second->info) {
+			result = first;
+			result->next = SortedMerge(first->next, second, a_);
+		}
+		else {
+			result = second;
+			result->next = SortedMerge(first, second->next, a_);
+		}
+		return (result);
+	}
+	void splitList(NodeDL* source, NodeDL** firstRef, NodeDL** secondRef)
+	{
+		NodeDL* slow = source;
+		NodeDL* fast = source->next;
+
+		while (fast != NULL) {
+			fast = fast->next;
+			if (fast != NULL) {
+				slow = slow->next;
+				fast = fast->next;
+			}
+		}
+
+		*firstRef = source;
+		*secondRef = slow->next;
+		slow->next = NULL;
+	}
+	void sortListMerge(NodeDL** headRef, char a_ = 'a')
+	{
+		NodeDL* head = *headRef;
+		NodeDL* first;
+		NodeDL* second;
+
+		if ((head == NULL) || (head->next == NULL)) {
+			return;
+		}
+
+		splitList(head, &first, &second);
+
+		sortListMerge(&first);
+		sortListMerge(&second);
+
+		*headRef = SortedMerge(first, second, a_);
+	}
+	void sortListQuick() {}
+	void sortListHeap() {}
+
+	NodeDL* findIntersection(NodeDL* head1, NodeDL* head2) {
+		NodeDL* ptr1 = head1;
+		NodeDL* ptr2;
+		bool sameValue;
+		NodeDL* intersectionPtr;
+		bool firstEntry = false;
+		int count = 0;
+		int countCommon = 0;
+		int entryCount = 0;
+		while (ptr1 != nullptr) {
+			ptr2 = head2;
+			while (ptr2 != nullptr) {
+				sameValue = (ptr1->info == ptr2->info) ? true : false;
+				if (!firstEntry && sameValue) {
+					intersectionPtr = ptr2;
+					entryCount++;
+				}
+				else if (sameValue) {
+					entryCount++;
+					countCommon++;
+				}
+				count++;
+				ptr2 = ptr2->next;
+			}
+			if (countCommon == (entryCount - 1)) {
+				return intersectionPtr;
+				break;
+			}
+			ptr1 = ptr1->next;
+		}
+		return nullptr;
+	}
+	bool findCycles() {
+
+		NodeDL* slow = head;
+		NodeDL* fast = head;
+		while ((fast->next != nullptr) && (fast != nullptr)) {
+			slow = slow->next;
+			fast = fast->next->next;
+			if (slow == fast) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+	NodeDL* findCentre() {
+		NodeDL* slow = head;
+		NodeDL* fast = head->next;
+		while (fast != NULL) {
+			fast = fast->next;
+			if (fast != NULL) {
+				slow = slow->next;
+				fast = fast->next;
+			}
+		}
+		return slow;
+	}
+	int* findFrequencyOfNodes() {
+		int* arr = new int[10]();
+		NodeDL* ptr = head;
+		while (ptr != nullptr) {
+			arr[ptr->info]++;
+			ptr = ptr->next;
+		}
+
+		return arr;
+	}
+	bool checkPallindrome() {
+		NodeDL* centrePtr = findCentre();
+		NodeDL* mainHead = head;
+		head = centrePtr;
+		reverseList();
+		NodeDL* ptr1 = head;
+		NodeDL* ptr2 = mainHead;
+		bool continuousChain = true;
+		while ((ptr1 != nullptr) && (ptr2 != centrePtr)) {
+			continuousChain &= (ptr1->info == ptr2->info);
+			if (!continuousChain) {
+				return false;
+			}
+			ptr1 = ptr1->next;
+			ptr2 = ptr2->next;
+		}
+		return true;
+	}
+
 };

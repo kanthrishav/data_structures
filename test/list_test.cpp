@@ -811,7 +811,7 @@ namespace LINKEDLIST_linear {
 		while (ptr->next != nullptr)
 			ptr = ptr->next;
 
-		list->sortListMerge(&list->head);
+		list->sortListMerge(&list->head, 'a');
 
 		int val2[size] = { 0, 1, 2, 3, 4, 5, 6 };
 		ptr = list->head;
@@ -820,7 +820,6 @@ namespace LINKEDLIST_linear {
 			ptr = ptr->next;
 		}
 
-		/*
 		ptr = list->head;
 		while (ptr->next != nullptr)
 			ptr = ptr->next;
@@ -831,8 +830,42 @@ namespace LINKEDLIST_linear {
 			ASSERT_EQ(ptr->info, val3[i]);
 			ptr = ptr->next;
 		}
-		*/
+	}
+	TEST_F(ARRANGEMENT, quickSort) {
+		int const size = 7;
+		int val[size] = { 5, 6, 2, 0, 1, 4, 3 };
+		int i;
+		for (i = 0; i < size; i++)
+			list->insertAtEnd(val[i]);
+		ptr = list->head;
+		for (i = 0; i < (size - 1); i++) {
+			ASSERT_EQ(ptr->info, val[i]);
+			ptr = ptr->next;
+		}
 
+		ptr = list->head;
+		while (ptr->next != nullptr)
+			ptr = ptr->next;
+
+		list->sortListQuick(&list->head, 'a');
+
+		int val2[size] = { 0, 1, 2, 3, 4, 5, 6 };
+		ptr = list->head;
+		for (i = 0; i < size; i++) {
+			ASSERT_EQ(ptr->info, val2[i]);
+			ptr = ptr->next;
+		}
+		
+		ptr = list->head;
+		while (ptr->next != nullptr)
+			ptr = ptr->next;
+		list->sortListQuick(&list->head, 'd');
+		int val3[size] = { 6, 5, 4, 3, 2, 1, 0 };
+		ptr = list->head;
+		for (i = 0; i < size; i++) {
+			ASSERT_EQ(ptr->info, val3[i]);
+			ptr = ptr->next;
+		}
 	}
 
 
@@ -1114,6 +1147,7 @@ namespace LINKEDLIST_double {
 		found = list->insertBefore(7, 11);
 		ASSERT_EQ(found, false);
 	}
+
 
 	class DELETION_DL : public DL {};
 	TEST_F(DELETION_DL, Start_1Val) {
@@ -1403,6 +1437,563 @@ namespace LINKEDLIST_double {
 		ASSERT_EQ(list->head->info, 5);
 		ASSERT_EQ(list->head->next->info, 4);
 		ASSERT_EQ(list->head->next->next, nullptr);
+	}
+
+
+	class ARRANGEMENT_DL : public DL {};
+	TEST_F(ARRANGEMENT_DL, reverse) {
+		int const size = 7;
+		int val[size] = { 5, 6, 2, 0, 1, 4, 3 };
+		int i;
+		for (i = 0; i < size; i++)
+			list->insertAtEnd(val[i]);
+		ptr = list->head;
+		for (i = 0; i < size; i++) {
+			ASSERT_EQ(ptr->info, val[i]);
+			ptr = ptr->next;
+		}
+		list->reverseList();
+		ptr = list->head;
+		for (i = 0; i < size; i++) {
+			ASSERT_EQ(ptr->info, val[size - 1 - i]);
+			ptr = ptr->next;
+		}
+	}
+	TEST_F(ARRANGEMENT_DL, swapNodes) {
+		int const size = 7;
+		int val[size] = { 5, 6, 2, 0, 1, 4, 3 };
+		int i;
+		NodeDL* p0;
+		NodeDL* p1;
+		NodeDL* p2;
+		for (i = 0; i < size; i++)
+			list->insertAtEnd(val[i]);
+		ptr = list->head;
+		for (i = 0; i < size; i++) {
+			if (i == 1)
+				p0 = ptr;
+			if (i == 2)
+				p1 = ptr;
+			if (i == 3)
+				p2 = ptr;
+			ASSERT_EQ(ptr->info, val[i]);
+			ptr = ptr->next;
+		}
+		list->swapNodes(p0, p1, p2);
+		ptr = list->head;
+		ASSERT_EQ(ptr->info, val[0]);
+		ptr = ptr->next;
+		ASSERT_EQ(ptr->info, val[1]);
+		ptr = ptr->next;
+		ASSERT_EQ(ptr->info, val[3]);
+		ptr = ptr->next;
+		ASSERT_EQ(ptr->info, val[2]);
+		ptr = ptr->next;
+		for (i = 4; i < size; i++) {
+			ASSERT_EQ(ptr->info, val[i]);
+			ptr = ptr->next;
+		}
+	}
+	TEST_F(ARRANGEMENT_DL, length) {
+		int const size = 7;
+		int val[size] = { 5, 6, 2, 0, 1, 4, 3 };
+		int i;
+		for (i = 0; i < size; i++)
+			list->insertAtEnd(val[i]);
+		ptr = list->head;
+		for (i = 0; i < size; i++) {
+			ASSERT_EQ(ptr->info, val[i]);
+			ptr = ptr->next;
+		}
+		int len = list->length();
+		ASSERT_EQ(len, size);
+	}
+	TEST_F(ARRANGEMENT_DL, rotateFromStartToEndBy2) {
+		int const size = 7;
+		int val[size] = { 5, 6, 2, 0, 1, 4, 3 };
+		int i;
+		for (i = 0; i < size; i++)
+			list->insertAtEnd(val[i]);
+		ptr = list->head;
+		for (i = 0; i < size; i++) {
+			ASSERT_EQ(ptr->info, val[i]);
+			ptr = ptr->next;
+		}
+		list->rotateFromStartToEndBy(2);
+		ptr = list->head;
+		int val2[size] = { 4, 3, 5, 6, 2, 0, 1 };
+		for (i = 0; i < size; i++) {
+			ASSERT_EQ(ptr->info, val2[i]);
+			ptr = ptr->next;
+		}
+	}
+	TEST_F(ARRANGEMENT_DL, rotateFromStartToEndBy4) {
+		int const size = 7;
+		int val[size] = { 5, 6, 2, 0, 1, 4, 3 };
+		int i;
+		for (i = 0; i < size; i++)
+			list->insertAtEnd(val[i]);
+		ptr = list->head;
+		for (i = 0; i < size; i++) {
+			ASSERT_EQ(ptr->info, val[i]);
+			ptr = ptr->next;
+		}
+		list->rotateFromStartToEndBy(4);
+		ptr = list->head;
+		int val2[size] = { 0, 1, 4, 3, 5, 6, 2 };
+		for (i = 0; i < size; i++) {
+			ASSERT_EQ(ptr->info, val2[i]);
+			ptr = ptr->next;
+		}
+	}
+	TEST_F(ARRANGEMENT_DL, rotateFromStartToEndBy1) {
+		int const size = 7;
+		int val[size] = { 5, 6, 2, 0, 1, 4, 3 };
+		int i;
+		for (i = 0; i < size; i++)
+			list->insertAtEnd(val[i]);
+		ptr = list->head;
+		for (i = 0; i < size; i++) {
+			ASSERT_EQ(ptr->info, val[i]);
+			ptr = ptr->next;
+		}
+		list->rotateFromStartToEndBy(1);
+		ptr = list->head;
+		int val2[size] = { 3, 5, 6, 2, 0, 1, 4 };
+		for (i = 0; i < size; i++) {
+			ASSERT_EQ(ptr->info, val2[i]);
+			ptr = ptr->next;
+		}
+	}
+	TEST_F(ARRANGEMENT_DL, rotateFromEndToStartBy2) {
+		int const size = 7;
+		int val[size] = { 5, 6, 2, 0, 1, 4, 3 };
+		int i;
+		for (i = 0; i < size; i++)
+			list->insertAtEnd(val[i]);
+		ptr = list->head;
+		for (i = 0; i < size; i++) {
+			ASSERT_EQ(ptr->info, val[i]);
+			ptr = ptr->next;
+		}
+		list->rotateFromEndToStartBy(2);
+		ptr = list->head;
+		int val2[size] = { 2, 0, 1, 4, 3, 5, 6 };
+		for (i = 0; i < size; i++) {
+			ASSERT_EQ(ptr->info, val2[i]);
+			ptr = ptr->next;
+		}
+	}
+	TEST_F(ARRANGEMENT_DL, rotateFromEndToStartBy4) {
+		int const size = 7;
+		int val[size] = { 5, 6, 2, 0, 1, 4, 3 };
+		int i;
+		for (i = 0; i < size; i++)
+			list->insertAtEnd(val[i]);
+		ptr = list->head;
+		for (i = 0; i < size; i++) {
+			ASSERT_EQ(ptr->info, val[i]);
+			ptr = ptr->next;
+		}
+		list->rotateFromEndToStartBy(4);
+		ptr = list->head;
+		int val2[size] = { 1, 4, 3, 5, 6, 2, 0 };
+		for (i = 0; i < size; i++) {
+			ASSERT_EQ(ptr->info, val2[i]);
+			ptr = ptr->next;
+		}
+	}
+	TEST_F(ARRANGEMENT_DL, rotateFromEndToStartBy1) {
+		int const size = 7;
+		int val[size] = { 5, 6, 2, 0, 1, 4, 3 };
+		int i;
+		for (i = 0; i < size; i++)
+			list->insertAtEnd(val[i]);
+		ptr = list->head;
+		for (i = 0; i < size; i++) {
+			ASSERT_EQ(ptr->info, val[i]);
+			ptr = ptr->next;
+		}
+		list->rotateFromEndToStartBy(1);
+		ptr = list->head;
+		int val2[size] = { 6, 2, 0, 1, 4, 3, 5 };
+		for (i = 0; i < size; i++) {
+			ASSERT_EQ(ptr->info, val2[i]);
+			ptr = ptr->next;
+		}
+	}
+	TEST_F(ARRANGEMENT_DL, splitInTwoAt3) {
+		int const size = 7;
+		int val[size] = { 5, 6, 2, 0, 1, 4, 3 };
+		int i;
+		for (i = 0; i < size; i++)
+			list->insertAtEnd(val[i]);
+		ptr = list->head;
+		for (i = 0; i < size; i++) {
+			ASSERT_EQ(ptr->info, val[i]);
+			ptr = ptr->next;
+		}
+		NodeDL* otherList = list->splitListInTwo(3);
+		ptr = list->head;
+		int val2[size - 3] = { 5, 6, 2, 0 };
+		int val3[3] = { 1, 4, 3 };
+		for (i = 0; i < (size - 3); i++) {
+			ASSERT_EQ(ptr->info, val2[i]);
+			ptr = ptr->next;
+		}
+		ptr = otherList;
+		for (i = 0; i < 3; i++) {
+			ASSERT_EQ(ptr->info, val3[i]);
+			ptr = ptr->next;
+		}
+	}
+	TEST_F(ARRANGEMENT_DL, splitInTwoAt5) {
+		int const size = 7;
+		int val[size] = { 5, 6, 2, 0, 1, 4, 3 };
+		int i;
+		for (i = 0; i < size; i++)
+			list->insertAtEnd(val[i]);
+		ptr = list->head;
+		for (i = 0; i < size; i++) {
+			ASSERT_EQ(ptr->info, val[i]);
+			ptr = ptr->next;
+		}
+		NodeDL* otherList = list->splitListInTwo(5);
+		ptr = list->head;
+		int val2[size - 1] = { 5, 6, 2, 0, 1, 4 };
+		int val3[1] = { 3 };
+		for (i = 0; i < (size - 1); i++) {
+			ASSERT_EQ(ptr->info, val2[i]);
+			ptr = ptr->next;
+		}
+		ptr = otherList;
+		for (i = 0; i < 1; i++) {
+			ASSERT_EQ(ptr->info, val3[i]);
+			ptr = ptr->next;
+		}
+	}
+	TEST_F(ARRANGEMENT_DL, splitInTwoAt0) {
+		int const size = 7;
+		int val[size] = { 5, 6, 2, 0, 1, 4, 3 };
+		int i;
+		for (i = 0; i < size; i++)
+			list->insertAtEnd(val[i]);
+		ptr = list->head;
+		for (i = 0; i < size; i++) {
+			ASSERT_EQ(ptr->info, val[i]);
+			ptr = ptr->next;
+		}
+		NodeDL* otherList = list->splitListInTwo(0);
+		ptr = list->head;
+		int val2[1] = { 5 };
+		int val3[size - 1] = { 6, 2, 0, 1, 4, 3 };
+		for (i = 0; i < 1; i++) {
+			ASSERT_EQ(ptr->info, val2[i]);
+			ptr = ptr->next;
+		}
+		ptr = otherList;
+		for (i = 0; i < (size - 1); i++) {
+			ASSERT_EQ(ptr->info, val3[i]);
+			ptr = ptr->next;
+		}
+	}
+	TEST_F(ARRANGEMENT_DL, splitIntoEvenOdd) {
+		int const size = 7;
+		int val[size] = { 5, 6, 2, 0, 1, 4, 3 };
+		int i;
+		for (i = 0; i < size; i++)
+			list->insertAtEnd(val[i]);
+		ptr = list->head;
+		for (i = 0; i < size; i++) {
+			ASSERT_EQ(ptr->info, val[i]);
+			ptr = ptr->next;
+		}
+		NodeDL* even = list->splitIntoOddEvenLists();
+		ptr = list->head;
+		int val2[3] = { 5, 1, 3 };
+		int val3[4] = { 6, 2, 0, 4 };
+		for (i = 0; i < 3; i++) {
+			ASSERT_EQ(ptr->info, val2[i]);
+			ptr = ptr->next;
+		}
+		ptr = even;
+		for (i = 0; i < 4; i++) {
+			ASSERT_EQ(ptr->info, val3[i]);
+			ptr = ptr->next;
+		}
+	}
+	TEST_F(ARRANGEMENT_DL, removeDuplicates) {
+		int const size = 15;
+		int val[size] = { 0, 5, 0, 6, 2, 0, 1, 6, 1, 1, 4, 3, 3, 3, 3 };
+		int i;
+		for (i = 0; i < size; i++)
+			list->insertAtEnd(val[i]);
+		list->removeDuplicates();
+		ptr = list->head;
+		int val2[7] = { 0, 5, 6, 2, 1, 4, 3 };
+		for (i = 0; i < 7; i++) {
+			ASSERT_EQ(ptr->info, val2[i]);
+			ptr = ptr->next;
+		}
+	}
+	TEST_F(ARRANGEMENT_DL, removeDuplicatesInSortedList) {
+		int const size = 12;
+		int val[size] = { 0, 0, 0, 1, 1, 2, 3, 4, 4, 4, 4, 5 };
+		int i;
+		for (i = 0; i < size; i++)
+			list->insertAtEnd(val[i]);
+		list->removeDuplicatesFromSortedList();
+		ptr = list->head;
+		int val2[7] = { 0, 1, 2, 3, 4, 5 };
+		for (i = 0; i < 6; i++) {
+			ASSERT_EQ(ptr->info, val2[i]);
+			ptr = ptr->next;
+		}
+	}
+	TEST_F(ARRANGEMENT_DL, bubbleSort) {
+		int const size = 7;
+		int val[size] = { 5, 6, 2, 0, 1, 4, 3 };
+		int i;
+		for (i = 0; i < size; i++)
+			list->insertAtEnd(val[i]);
+		ptr = list->head;
+		for (i = 0; i < size; i++) {
+			ASSERT_EQ(ptr->info, val[i]);
+			ptr = ptr->next;
+		}
+		list->sortListBubble('a');
+		int val2[size] = { 0, 1, 2, 3, 4, 5, 6 };
+		ptr = list->head;
+		for (i = 0; i < size; i++) {
+			ASSERT_EQ(ptr->info, val2[i]);
+			ptr = ptr->next;
+		}
+		list->sortListBubble('d');
+		int val3[size] = { 6, 5, 4, 3, 2, 1, 0 };
+		ptr = list->head;
+		for (i = 0; i < size; i++) {
+			ASSERT_EQ(ptr->info, val3[i]);
+			ptr = ptr->next;
+		}
+	}
+	TEST_F(ARRANGEMENT_DL, selectionSort) {
+		int const size = 7;
+		int val[size] = { 5, 6, 2, 0, 1, 4, 3 };
+		int i;
+		for (i = 0; i < size; i++)
+			list->insertAtEnd(val[i]);
+		ptr = list->head;
+		for (i = 0; i < size; i++) {
+			ASSERT_EQ(ptr->info, val[i]);
+			ptr = ptr->next;
+		}
+		list->sortListSelection('a');
+		int val2[size] = { 0, 1, 2, 3, 4, 5, 6 };
+		ptr = list->head;
+		for (i = 0; i < size; i++) {
+			ASSERT_EQ(ptr->info, val2[i]);
+			ptr = ptr->next;
+		}
+		list->sortListSelection('d');
+		int val3[size] = { 6, 5, 4, 3, 2, 1, 0 };
+		ptr = list->head;
+		for (i = 0; i < size; i++) {
+			ASSERT_EQ(ptr->info, val3[i]);
+			ptr = ptr->next;
+		}
+	}
+	TEST_F(ARRANGEMENT_DL, insertionSort) {
+		int const size = 7;
+		int val[size] = { 5, 6, 2, 0, 1, 4, 3 };
+		int i;
+		for (i = 0; i < size; i++)
+			list->insertAtEnd(val[i]);
+		ptr = list->head;
+		for (i = 0; i < size; i++) {
+			ASSERT_EQ(ptr->info, val[i]);
+			ptr = ptr->next;
+		}
+		list->sortListInsertion('a');
+		int val2[size] = { 0, 1, 2, 3, 4, 5, 6 };
+		ptr = list->head;
+		for (i = 0; i < size; i++) {
+			ASSERT_EQ(ptr->info, val2[i]);
+			ptr = ptr->next;
+		}
+		list->sortListInsertion('d');
+		int val3[size] = { 6, 5, 4, 3, 2, 1, 0 };
+		ptr = list->head;
+		for (i = 0; i < size; i++) {
+			ASSERT_EQ(ptr->info, val3[i]);
+			ptr = ptr->next;
+		}
+	}
+	TEST_F(ARRANGEMENT_DL, mergeSort) {
+		int const size = 7;
+		int val[size] = { 5, 6, 2, 0, 1, 4, 3 };
+		int i;
+		for (i = 0; i < size; i++)
+			list->insertAtEnd(val[i]);
+		ptr = list->head;
+		for (i = 0; i < (size - 1); i++) {
+			ASSERT_EQ(ptr->info, val[i]);
+			ptr = ptr->next;
+		}
+
+		ptr = list->head;
+		while (ptr->next != nullptr)
+			ptr = ptr->next;
+
+		list->sortListMerge(&list->head);
+
+		int val2[size] = { 0, 1, 2, 3, 4, 5, 6 };
+		ptr = list->head;
+		for (i = 0; i < size; i++) {
+			ASSERT_EQ(ptr->info, val2[i]);
+			ptr = ptr->next;
+		}
+
+		/*
+		ptr = list->head;
+		while (ptr->next != nullptr)
+			ptr = ptr->next;
+		list->sortListMerge(&list->head, 'd');
+		int val3[size] = { 6, 5, 4, 3, 2, 1, 0 };
+		ptr = list->head;
+		for (i = 0; i < size; i++) {
+			ASSERT_EQ(ptr->info, val3[i]);
+			ptr = ptr->next;
+		}
+		*/
+
+	}
+
+
+	class CUSTOM_DL : public DL {};
+
+	TEST_F(CUSTOM_DL, findIntersection) {
+
+		int const size = 7;
+		int val[size] = { 5, 6, 2, 0, 1, 4, 3 };
+		int i;
+		for (i = 0; i < size; i++)
+			list->insertAtEnd(val[i]);
+		ptr = list->head;
+		for (i = 0; i < size; i++) {
+			ASSERT_EQ(ptr->info, val[i]);
+			ptr = ptr->next;
+		}
+
+		ptr = list->head;
+		int intersectionValue = 2;
+		NodeDL* intersectionPtr;
+		while (ptr != nullptr) {
+			if (ptr->info == intersectionValue) {
+				intersectionPtr = ptr;
+				break;
+			}
+			ptr = ptr->next;
+		}
+
+		int val2[size] = { 7, 8, intersectionValue, 0, 1, 4, 3 };
+		DoublyLL* list2 = new DoublyLL;
+		list2->insertAtEnd(val2[0]);
+		list2->insertAtEnd(val2[1]);
+		list2->head->next->next = ptr;
+		ptr = list2->head;
+		for (i = 0; i < size; i++) {
+			ASSERT_EQ(ptr->info, val2[i]);
+			ptr = ptr->next;
+		}
+
+		NodeDL* intersectionNode = list->findIntersection(list->head, list2->head);
+		ASSERT_EQ(intersectionNode->info, intersectionValue);
+
+		int val3[5] = { 9, 10, 11, 12, 13 };
+		DoublyLL* list3 = new DoublyLL;
+		for (i = 0; i < size; i++)
+			list3->insertAtEnd(val3[i]);
+		intersectionNode = list3->findIntersection(list3->head, list2->head);
+		ASSERT_EQ(intersectionNode, nullptr);
+		intersectionNode = list3->findIntersection(list3->head, list->head);
+		ASSERT_EQ(intersectionNode, nullptr);
+
+	}
+	TEST_F(CUSTOM_DL, findCycles) {
+
+		int const size = 7;
+		int val[size] = { 5, 6, 2, 0, 1, 4, 3 };
+		int i;
+		for (i = 0; i < size; i++)
+			list->insertAtEnd(val[i]);
+		NodeDL* ptr = list->head;
+		NodeDL* ptr2;
+		for (i = 0; i < (size - 1); i++) {
+			if (ptr->info == 0)
+				ptr2 = ptr;
+			ASSERT_EQ(ptr->info, val[i]);
+			ptr = ptr->next;
+		}
+		bool found = list->findCycles();
+		ASSERT_EQ(found, false);
+
+		ptr->next = ptr2;
+
+		found = list->findCycles();
+		ASSERT_EQ(found, true);
+	}
+	TEST_F(CUSTOM_DL, findCentre) {
+		int const size = 7;
+		int val[size] = { 5, 6, 2, 0, 1, 4, 3 };
+		int i;
+		for (i = 0; i < size; i++)
+			list->insertAtEnd(val[i]);
+		NodeDL* ptr = list->head;
+		for (i = 0; i < (size - 1); i++) {
+			ASSERT_EQ(ptr->info, val[i]);
+			ptr = ptr->next;
+		}
+		NodeDL* centre = list->findCentre();
+		ASSERT_EQ(centre->info, 0);
+	}
+	TEST_F(CUSTOM_DL, findValueFrequency) {
+		int val[15] = { 0, 5, 0, 6, 2, 0, 1, 6, 1, 1, 4, 3, 3, 3, 3 };
+		int i;
+		for (i = 0; i < 15; i++)
+			list->insertAtEnd(val[i]);
+		NodeDL* ptr = list->head;
+		for (i = 0; i < 15; i++) {
+			ASSERT_EQ(ptr->info, val[i]);
+			ptr = ptr->next;
+		}
+		int* pFreq = list->findFrequencyOfNodes();
+		ASSERT_EQ(pFreq[0], 3);
+		ASSERT_EQ(pFreq[1], 3);
+		ASSERT_EQ(pFreq[2], 1);
+		ASSERT_EQ(pFreq[3], 4);
+		ASSERT_EQ(pFreq[4], 1);
+		ASSERT_EQ(pFreq[5], 1);
+		ASSERT_EQ(pFreq[6], 2);
+		ASSERT_EQ(pFreq[7], 0);
+		ASSERT_EQ(pFreq[8], 0);
+		ASSERT_EQ(pFreq[9], 0);
+	}
+	TEST_F(CUSTOM_DL, checkPallindrome) {
+		int val[8] = { 0, 5, 0, 6, 6, 0, 5, 0 };
+		int i;
+		for (i = 0; i < 8; i++)
+			list->insertAtEnd(val[i]);
+		NodeDL* ptr = list->head;
+		for (i = 0; i < 8; i++) {
+			ASSERT_EQ(ptr->info, val[i]);
+			ptr = ptr->next;
+		}
+		bool found = list->checkPallindrome();
+		ASSERT_EQ(found, true);
+
+		val[5] = 1;
+		found = list->checkPallindrome();
+		ASSERT_EQ(found, false);
 	}
 
 }

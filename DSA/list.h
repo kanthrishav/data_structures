@@ -589,6 +589,7 @@ public:
 		}
 
 	}
+	
 	NodeLL* SortedMerge(NodeLL* first, NodeLL* second, char a_)
 	{
 		NodeLL* result = NULL;
@@ -598,13 +599,25 @@ public:
 		else if (second == NULL)
 			return (first);
 
-		if (first->info <= second->info) {
-			result = first;
-			result->next = SortedMerge(first->next, second, a_);
+		if (a_ == 'a') {
+			if (first->info <= second->info) {
+				result = first;
+				result->next = SortedMerge(first->next, second, a_);
+			}
+			else {
+				result = second;
+				result->next = SortedMerge(first, second->next, a_);
+			}
 		}
-		else {
-			result = second;
-			result->next = SortedMerge(first, second->next, a_);
+		else if (a_ == 'd') {
+			if (first->info >= second->info) {
+				result = first;
+				result->next = SortedMerge(first->next, second, a_);
+			}
+			else {
+				result = second;
+				result->next = SortedMerge(first, second->next, a_);
+			}
 		}
 		return (result);
 	}
@@ -625,7 +638,7 @@ public:
 		*secondRef = slow->next;
 		slow->next = NULL;
 	}
-	void sortListMerge(NodeLL** headRef, char a_ = 'a')
+	void sortListMerge(NodeLL** headRef, char a_)
 	{
 		NodeLL* head = *headRef;
 		NodeLL* first;
@@ -637,12 +650,82 @@ public:
 
 		splitList(head, &first, &second);
 
-		sortListMerge(&first);
-		sortListMerge(&second);
+		sortListMerge(&first, a_);
+		sortListMerge(&second, a_);
 
 		*headRef = SortedMerge(first, second, a_);
 	}
-	void sortListQuick() {}
+	void sortListQuick(NodeLL** headRef, char a_) {
+		NodeLL* head = *headRef;
+		if ((head == NULL) || (head->next == NULL)) {
+			return;
+		}
+		NodeLL* ptr1 = head;
+		NodeLL* ptr2 = head;
+		NodeLL* pivot = head;
+		NodeLL* ptr;
+		int temp;
+		while (pivot->next != nullptr) {
+			pivot = pivot->next;
+		}
+		while (ptr1->next!=nullptr) {
+			if (ptr1->info <= pivot->info && a_=='a') {
+				if (ptr1 != ptr2) {
+					temp = ptr1->info;
+					ptr1->info = ptr2->info;
+					ptr2->info = temp;
+				}
+				ptr2 = ptr2->next;
+			}
+			else if (ptr1->info >= pivot->info && a_ == 'd') {
+				if (ptr1 != ptr2) {
+					temp = ptr1->info;
+					ptr1->info = ptr2->info;
+					ptr2->info = temp;
+				}
+				ptr2 = ptr2->next;
+			}
+
+			ptr1 = ptr1->next;
+		}
+		temp = ptr2->info;
+		ptr2->info = pivot->info;
+		pivot->info = temp;
+		pivot = ptr2;
+
+		NodeLL* left;
+		NodeLL* right;
+		
+		if (pivot != head)
+			left = head;
+		else
+			left = nullptr;
+		right = pivot->next;
+		NodeLL* leftEnd = left;
+		if (leftEnd != nullptr && leftEnd != pivot) {
+			while (leftEnd->next != pivot)
+				leftEnd = leftEnd->next;
+		}
+		pivot->next = nullptr;
+		if(leftEnd!=nullptr)
+			leftEnd->next = nullptr;
+
+		sortListQuick(&left, a_);
+		sortListQuick(&right, a_);
+
+		if (left != nullptr) {
+			leftEnd = left;
+			while (leftEnd->next != nullptr)
+				leftEnd = leftEnd->next;
+			leftEnd->next = pivot;
+			pivot->next = right;
+			*headRef = left;
+		}
+		else {
+			pivot->next = right;
+			*headRef = pivot;
+		}
+	}
 	void sortListHeap() {}
 
 	NodeLL* findIntersection(NodeLL* head1, NodeLL* head2) {
