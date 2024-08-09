@@ -793,6 +793,9 @@ public:
 
 	}
 
+	bool linearSearch(int n) {}
+	bool binarySearch(int n) {}
+
 	NodeLL* findIntersection(NodeLL* head1, NodeLL* head2) {
 		NodeLL* ptr1 = head1;
 		NodeLL* ptr2;

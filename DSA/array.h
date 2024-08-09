@@ -37,6 +37,84 @@ public:
 		}
 		return;
 	}
+	void rotateFromEndToStartBy(int* arr, int n) {
+		int end = size - 1;
+		int count = 0;
+		int beginValue;
+		while (count < n) {
+			beginValue = arr[0];
+			for (int i = 1; i < size; i++) {
+				arr[i-1] = arr[i];
+			}
+			arr[end] = beginValue;
+			count++;
+		}
+		return;
+	}
+	void splitArrayInTwo(int * arr, int splitIndex, int * arr1, int * arr2) {
+		int size1 = splitIndex + 1;
+		int size2 = size - (splitIndex + 1);
+		int i;
+		for (i = 0; i <= splitIndex; i++) {
+			arr1[i] = arr[i];
+		}
+		for (i = splitIndex+1; i < size; i++) {
+			arr2[i - splitIndex - 1] = arr[i];
+		}
+	}
+	void removeDuplicates(int* arr, int** newArray, int* currentSize) {
+		int countUnique = 0;
+		int newSize;
+		int* frequency = new int[100] {};
+		for (int i = 0; i < size; i++) {
+			frequency[arr[i]] += 1;
+		}
+		for (int i = 0; i < 100; i++) {
+			if (frequency[i] != 0) {
+				countUnique += 1;
+			}
+		}
+		newSize = countUnique;
+		int* againNewArray = new int[newSize];
+		int count = 0;
+		for (int i = 0; i < size; i++) {
+			if (frequency[arr[i]] >= 1) {
+				againNewArray[count] = arr[i];
+				frequency[arr[i]] = 0;
+				count++;
+			}
+		}
+		*newArray = againNewArray;
+		*currentSize = newSize;
+		delete[] frequency;
+		return;
+	}
+
+	void sortBubble(int* arr, char a_) {}
+	void sortSelection(int* arr, char a_) {}
+	void sortInsertion(int* arr, char a_) {}
+	void sortMerge(int* arr, char a_) {}
+	void sortQuick(int* arr, char a_) {}
+	void sortHeap(int* arr, char a_) {}
+
+	bool linearSearch(int* arr, int n) {}
+	bool binarySearch(int * arr, int n) {}
+
+	int * findIntersection(int* arr1, int* arr2) {}
+	int* findUnion(int* arr1, int* arr2) {}
+	bool checkPallindrome(int* arr) {}
+	int findKthLargestElement(int* arr, int k) {}
+	int findKthSmallestElement(int* arr, int k) {}
+	int* getSubArrayWithSpecificSum(int* arr, int sum) {}
+	int* getSubArrayWithSpecificProduct(int* arr, int product) {}
+	void segregateElementsBasedOnSign(int* arr) {}
+	void segregateElementsBasedOnEvenOdd(int* arr) {}
+	int countPairsWithSpecificSum(int* arr, int sum) {}
+	int * findCommonElementsInThreeSortedArrays(int* arr1, int* arr2, int* arr3) {}
+	void rearrangeWithAlternatingSign(int* arr) {}
+	int* findLargestSumContiguousSubArray(int* arr) {}
+	int* findLargestProductContiguousSubArray(int* arr) {}
+
 };
 
 
