@@ -867,6 +867,43 @@ namespace LINKEDLIST_linear {
 			ptr = ptr->next;
 		}
 	}
+	TEST_F(ARRANGEMENT, heapSort) {
+		int const size = 7;
+		int val[size] = { 5, 6, 2, 0, 1, 4, 3 };
+		int i;
+		for (i = 0; i < size; i++)
+			list->insertAtEnd(val[i]);
+		ptr = list->head;
+		for (i = 0; i < (size - 1); i++) {
+			ASSERT_EQ(ptr->info, val[i]);
+			ptr = ptr->next;
+		}
+
+		ptr = list->head;
+		while (ptr->next != nullptr)
+			ptr = ptr->next;
+
+		list->sortListHeap(&list->head, 'a');
+
+		int val2[size] = { 0, 1, 2, 3, 4, 5, 6 };
+		ptr = list->head;
+		for (i = 0; i < size; i++) {
+			ASSERT_EQ(ptr->info, val2[i]);
+			ptr = ptr->next;
+		}
+		/*
+		ptr = list->head;
+		while (ptr->next != nullptr)
+			ptr = ptr->next;
+		list->sortListHeap(&list->head, 'd');
+		int val3[size] = { 6, 5, 4, 3, 2, 1, 0 };
+		ptr = list->head;
+		for (i = 0; i < size; i++) {
+			ASSERT_EQ(ptr->info, val3[i]);
+			ptr = ptr->next;
+		}
+		*/
+	}
 
 
 	class CUSTOM : public LL {};
@@ -1844,7 +1881,7 @@ namespace LINKEDLIST_double {
 		while (ptr->next != nullptr)
 			ptr = ptr->next;
 
-		list->sortListMerge(&list->head);
+		list->sortListMerge(&list->head, 'a');
 
 		int val2[size] = { 0, 1, 2, 3, 4, 5, 6 };
 		ptr = list->head;
@@ -1852,8 +1889,7 @@ namespace LINKEDLIST_double {
 			ASSERT_EQ(ptr->info, val2[i]);
 			ptr = ptr->next;
 		}
-
-		/*
+		
 		ptr = list->head;
 		while (ptr->next != nullptr)
 			ptr = ptr->next;
@@ -1863,11 +1899,81 @@ namespace LINKEDLIST_double {
 		for (i = 0; i < size; i++) {
 			ASSERT_EQ(ptr->info, val3[i]);
 			ptr = ptr->next;
+		}		
+	}
+	TEST_F(ARRANGEMENT_DL, quickSort) {
+		int const size = 7;
+		int val[size] = { 5, 6, 2, 0, 1, 4, 3 };
+		int i;
+		for (i = 0; i < size; i++)
+			list->insertAtEnd(val[i]);
+		ptr = list->head;
+		for (i = 0; i < (size - 1); i++) {
+			ASSERT_EQ(ptr->info, val[i]);
+			ptr = ptr->next;
+		}
+
+		ptr = list->head;
+		while (ptr->next != nullptr)
+			ptr = ptr->next;
+
+		list->sortListQuick(&list->head, 'a');
+
+		int val2[size] = { 0, 1, 2, 3, 4, 5, 6 };
+		ptr = list->head;
+		for (i = 0; i < size; i++) {
+			ASSERT_EQ(ptr->info, val2[i]);
+			ptr = ptr->next;
+		}
+
+		ptr = list->head;
+		while (ptr->next != nullptr)
+			ptr = ptr->next;
+		list->sortListQuick(&list->head, 'd');
+		int val3[size] = { 6, 5, 4, 3, 2, 1, 0 };
+		ptr = list->head;
+		for (i = 0; i < size; i++) {
+			ASSERT_EQ(ptr->info, val3[i]);
+			ptr = ptr->next;
+		}
+	}
+	TEST_F(ARRANGEMENT_DL, heapSort) {
+		int const size = 7;
+		int val[size] = { 5, 6, 2, 0, 1, 4, 3 };
+		int i;
+		for (i = 0; i < size; i++)
+			list->insertAtEnd(val[i]);
+		ptr = list->head;
+		for (i = 0; i < (size - 1); i++) {
+			ASSERT_EQ(ptr->info, val[i]);
+			ptr = ptr->next;
+		}
+
+		ptr = list->head;
+		while (ptr->next != nullptr)
+			ptr = ptr->next;
+
+		list->sortListHeap(&list->head, 'a');
+
+		int val2[size] = { 0, 1, 2, 3, 4, 5, 6 };
+		ptr = list->head;
+		for (i = 0; i < size; i++) {
+			ASSERT_EQ(ptr->info, val2[i]);
+			ptr = ptr->next;
+		}
+		/*
+		ptr = list->head;
+		while (ptr->next != nullptr)
+			ptr = ptr->next;
+		list->sortListHeap(&list->head, 'd');
+		int val3[size] = { 6, 5, 4, 3, 2, 1, 0 };
+		ptr = list->head;
+		for (i = 0; i < size; i++) {
+			ASSERT_EQ(ptr->info, val3[i]);
+			ptr = ptr->next;
 		}
 		*/
-
 	}
-
 
 	class CUSTOM_DL : public DL {};
 
@@ -1988,12 +2094,49 @@ namespace LINKEDLIST_double {
 			ASSERT_EQ(ptr->info, val[i]);
 			ptr = ptr->next;
 		}
+		
 		bool found = list->checkPallindrome();
 		ASSERT_EQ(found, true);
-
 		val[5] = 1;
 		found = list->checkPallindrome();
 		ASSERT_EQ(found, false);
+		/*
+		*/
+	}
+	TEST_F(CUSTOM_DL, addPolynomials) {
+		int coeff1[4] = { 0, 5, 0, 6 };
+		int pow1[4] = { 0, 1, 2, 3 };
+		int coeff2[2] = { 4, -3 };
+		int pow2[2] = { 1, 2 };
+
+		DoublyLL* head1 = new DoublyLL;
+		DoublyLL* head2 = new DoublyLL;
+
+		head1->head2 = new NodeDL2;
+		head2->head2 = new NodeDL2;
+		NodeDL2* ptr1 = head1->head2;
+		NodeDL2* ptr2 = head2->head2;
+
+		for (int i = 0; i < 4; i++) {
+			ptr1->info1 = coeff1[i];
+			ptr1->info2 = pow1[i];
+			ptr1->next = new NodeDL2;
+			ptr1 = ptr1->next;
+		}
+		for (int i = 0; i < 2; i++) {
+			ptr2->info1 = coeff2[i];
+			ptr2->info2 = pow2[i];
+			ptr2->next = new NodeDL2;
+			ptr2 = ptr2->next;
+		}
+		NodeDL2* addedPtr = list->addPolynomials(head1->head2, head2->head2);
+		ASSERT_EQ(addedPtr->info1, 0);
+		addedPtr = addedPtr->next;
+		ASSERT_EQ(addedPtr->info1, 9);
+		addedPtr = addedPtr->next;
+		ASSERT_EQ(addedPtr->info1, -3);
+		addedPtr = addedPtr->next;
+		ASSERT_EQ(addedPtr->info1, 6);
 	}
 
 }

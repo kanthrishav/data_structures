@@ -48,7 +48,6 @@ public:
 	}
 };
 
-
 class LinearLL {
 public:
 	NodeLL* head;
@@ -726,7 +725,73 @@ public:
 			*headRef = pivot;
 		}
 	}
-	void sortListHeap() {}
+	void heapify(int arr[], int size, int root) {
+		int temp;
+		int largest = root;
+		int l = 2 * root + 1;
+		int r = 2 * root + 2;
+
+		if (l < size && arr[l] > arr[largest]) {
+			largest = l;
+		}
+
+		if (r < size && arr[r] > arr[largest]) {
+			largest = r;
+		}
+
+		if (largest != root) {
+			temp = arr[root];
+			arr[root] = arr[largest];
+			arr[largest] = temp;
+
+			heapify(arr, size, largest);
+		}
+	}
+	void sortListHeap(NodeLL** headRef, char a_) {
+		const int size = this->length();
+		int *arr = new int[size];
+		NodeLL* head = *headRef;
+		NodeLL* ptr = head;
+		int i = 0;
+		int temp;
+		while (ptr != nullptr) {
+			arr[i] = ptr->info;
+			i++;
+			ptr = ptr->next;
+		}
+
+		// Build heap
+		for (int i = size / 2 - 1; i >= 0; i--) {
+			heapify(arr, size, i);
+			ptr = head;
+			for (int ii = 0; ii < size; ii++) {
+				ptr->info = arr[ii];
+				ptr = ptr->next;
+			}
+		}
+
+		// Moving current root to end
+		for (int i = size - 1; i > 0; i--) {
+			temp = arr[0];
+			arr[0] = arr[i];
+			arr[i] = temp;
+			heapify(arr, i, 0);
+			ptr = head;
+			for (int ii = 0; ii < size; ii++) {
+				ptr->info = arr[ii];
+				ptr = ptr->next;
+			}
+		}
+
+		ptr = head;
+		for (i = 0; i < size; i++) {
+			ptr->info = arr[i];
+			ptr = ptr->next;
+		}
+		
+		delete arr;
+
+	}
 
 	NodeLL* findIntersection(NodeLL* head1, NodeLL* head2) {
 		NodeLL* ptr1 = head1;
@@ -812,6 +877,7 @@ public:
 			ptr1 = ptr1->next;
 			ptr2 = ptr2->next;
 		}
+		head = mainHead;
 		return true;
 	}
 

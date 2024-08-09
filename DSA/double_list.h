@@ -28,11 +28,38 @@ public:
 	}
 };
 
+class NodeDL2 {
+public:
+	int info1;
+	int info2;
+	NodeDL2* next;
+	NodeDL2() {
+		info1 = 0;
+		info2 = 0;
+		next = NULL;
+	}
+	NodeDL2(int n1, int n2) {
+		info1 = n1;
+		info2 = n2;
+		next = NULL;
+	}
+	NodeDL2(int n1, int n2, NodeDL2* ptrNext) {
+		info1 = n1;
+		info2 = n2;
+		next = ptrNext;
+	}
+	~NodeDL2() {
+		delete next;
+	}
+};
+
 class DoublyLL {
 public:
 	NodeDL* head;
+	NodeDL2* head2;
 	DoublyLL() {
 		head = nullptr;
+		head2 = nullptr;
 	}
 	void print() {
 		NodeDL* ptr = head;
@@ -306,18 +333,24 @@ public:
 	void reverseList() {
 		NodeDL* ptr = head;
 		NodeDL* curr, * prev, * next;
+		NodeDL* temp;
 		prev = nullptr;
 
-		while (ptr != nullptr) {
+		while (ptr->next != nullptr) {
 			ptr = ptr->next;
 		}
 		NodeDL * head2 = ptr;
-		while (ptr != head->next) {
+		ptr->next = ptr->prev;
+		ptr->prev = nullptr;
+		ptr = ptr->next;
+		while (ptr != head) {
+			temp = ptr->next;
 			ptr->next = ptr->prev;
+			ptr->prev = temp;
 			ptr = ptr->next;
 		}
-		ptr->next = head;
-		head->next = ptr;
+		ptr->next = nullptr;
+		head = head2;
 	}
 	int length() {
 		NodeDL* ptr = head;
@@ -615,13 +648,25 @@ public:
 		else if (second == NULL)
 			return (first);
 
-		if (first->info <= second->info) {
-			result = first;
-			result->next = SortedMerge(first->next, second, a_);
+		if (a_ == 'a') {
+			if (first->info <= second->info) {
+				result = first;
+				result->next = SortedMerge(first->next, second, a_);
+			}
+			else {
+				result = second;
+				result->next = SortedMerge(first, second->next, a_);
+			}
 		}
-		else {
-			result = second;
-			result->next = SortedMerge(first, second->next, a_);
+		else if (a_ == 'd') {
+			if (first->info >= second->info) {
+				result = first;
+				result->next = SortedMerge(first->next, second, a_);
+			}
+			else {
+				result = second;
+				result->next = SortedMerge(first, second->next, a_);
+			}
 		}
 		return (result);
 	}
@@ -642,7 +687,7 @@ public:
 		*secondRef = slow->next;
 		slow->next = NULL;
 	}
-	void sortListMerge(NodeDL** headRef, char a_ = 'a')
+	void sortListMerge(NodeDL** headRef, char a_)
 	{
 		NodeDL* head = *headRef;
 		NodeDL* first;
@@ -654,13 +699,149 @@ public:
 
 		splitList(head, &first, &second);
 
-		sortListMerge(&first);
-		sortListMerge(&second);
+		sortListMerge(&first, a_);
+		sortListMerge(&second, a_);
 
 		*headRef = SortedMerge(first, second, a_);
 	}
-	void sortListQuick() {}
-	void sortListHeap() {}
+	void sortListQuick(NodeDL** headRef, char a_) {
+		NodeDL* head = *headRef;
+		if ((head == NULL) || (head->next == NULL)) {
+			return;
+		}
+		NodeDL* ptr1 = head;
+		NodeDL* ptr2 = head;
+		NodeDL* pivot = head;
+		NodeDL* ptr;
+		int temp;
+		while (pivot->next != nullptr) {
+			pivot = pivot->next;
+		}
+		while (ptr1->next != nullptr) {
+			if (ptr1->info <= pivot->info && a_ == 'a') {
+				if (ptr1 != ptr2) {
+					temp = ptr1->info;
+					ptr1->info = ptr2->info;
+					ptr2->info = temp;
+				}
+				ptr2 = ptr2->next;
+			}
+			else if (ptr1->info >= pivot->info && a_ == 'd') {
+				if (ptr1 != ptr2) {
+					temp = ptr1->info;
+					ptr1->info = ptr2->info;
+					ptr2->info = temp;
+				}
+				ptr2 = ptr2->next;
+			}
+
+			ptr1 = ptr1->next;
+		}
+		temp = ptr2->info;
+		ptr2->info = pivot->info;
+		pivot->info = temp;
+		pivot = ptr2;
+
+		NodeDL* left;
+		NodeDL* right;
+
+		if (pivot != head)
+			left = head;
+		else
+			left = nullptr;
+		right = pivot->next;
+		NodeDL* leftEnd = left;
+		if (leftEnd != nullptr && leftEnd != pivot) {
+			while (leftEnd->next != pivot)
+				leftEnd = leftEnd->next;
+		}
+		pivot->next = nullptr;
+		if (leftEnd != nullptr)
+			leftEnd->next = nullptr;
+
+		sortListQuick(&left, a_);
+		sortListQuick(&right, a_);
+
+		if (left != nullptr) {
+			leftEnd = left;
+			while (leftEnd->next != nullptr)
+				leftEnd = leftEnd->next;
+			leftEnd->next = pivot;
+			pivot->next = right;
+			*headRef = left;
+		}
+		else {
+			pivot->next = right;
+			*headRef = pivot;
+		}
+	}
+	void heapify(int arr[], int size, int root) {
+		int temp;
+		int largest = root;
+		int l = 2 * root + 1;
+		int r = 2 * root + 2;
+
+		if (l < size && arr[l] > arr[largest]) {
+			largest = l;
+		}
+
+		if (r < size && arr[r] > arr[largest]) {
+			largest = r;
+		}
+
+		if (largest != root) {
+			temp = arr[root];
+			arr[root] = arr[largest];
+			arr[largest] = temp;
+
+			heapify(arr, size, largest);
+		}
+	}
+	void sortListHeap(NodeDL** headRef, char a_) {
+		const int size = this->length();
+		int* arr = new int[size];
+		NodeDL* head = *headRef;
+		NodeDL* ptr = head;
+		int i = 0;
+		int temp;
+		while (ptr != nullptr) {
+			arr[i] = ptr->info;
+			i++;
+			ptr = ptr->next;
+		}
+
+		// Build heap
+		for (int i = size / 2 - 1; i >= 0; i--) {
+			heapify(arr, size, i);
+			ptr = head;
+			for (int ii = 0; ii < size; ii++) {
+				ptr->info = arr[ii];
+				ptr = ptr->next;
+			}
+		}
+
+		// Moving current root to end
+		for (int i = size - 1; i > 0; i--) {
+			temp = arr[0];
+			arr[0] = arr[i];
+			arr[i] = temp;
+			heapify(arr, i, 0);
+			ptr = head;
+			for (int ii = 0; ii < size; ii++) {
+				ptr->info = arr[ii];
+				ptr = ptr->next;
+			}
+		}
+
+		ptr = head;
+		for (i = 0; i < size; i++) {
+			ptr->info = arr[i];
+			ptr = ptr->next;
+		}
+
+		delete arr;
+
+	}
 
 	NodeDL* findIntersection(NodeDL* head1, NodeDL* head2) {
 		NodeDL* ptr1 = head1;
@@ -746,7 +927,55 @@ public:
 			ptr1 = ptr1->next;
 			ptr2 = ptr2->next;
 		}
+		head = mainHead;
 		return true;
+	}
+
+	NodeDL2* addPolynomials(NodeDL2* l1, NodeDL2* l2) {
+		NodeDL2* addedPtr = new NodeDL2;
+		NodeDL2* addedPtrHead = addedPtr;
+		int power;
+		int coeff1;
+		int coeff2;
+		for (power = 0; power < 10; power++) {
+			NodeDL2* ptr1 = l1;
+			NodeDL2* ptr2 = l2;
+			coeff1 = -100;
+			coeff2 = -100;
+			while (ptr1 != nullptr) {
+				if (power == ptr1->info2) {
+					coeff1 = ptr1->info1;
+					break;
+				}
+				ptr1 = ptr1->next;
+			}
+			while (ptr2 != nullptr) {
+				if (power == ptr2->info2) {
+					coeff2 = ptr2->info1;
+					break;
+				}
+				ptr2 = ptr2->next;
+			}
+			if ((coeff1 != -100) && (coeff2 != -100)) {
+				addedPtr->info1 = coeff1 + coeff2;
+				addedPtr->info2 = power;
+				addedPtr->next = new NodeDL2;
+				addedPtr = addedPtr->next;
+			}
+			else if (coeff1 != -100) {
+				addedPtr->info1 = coeff1;
+				addedPtr->info2 = power;
+				addedPtr->next = new NodeDL2;
+				addedPtr = addedPtr->next;
+			}
+			else if (coeff2 != -100) {
+				addedPtr->info1 = coeff2;
+				addedPtr->info2 = power;
+				addedPtr->next = new NodeDL2;
+				addedPtr = addedPtr->next;
+			}
+		}
+		return addedPtrHead;
 	}
 
 };
