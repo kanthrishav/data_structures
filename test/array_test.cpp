@@ -133,5 +133,70 @@ namespace ARRAY_T {
 		}
 		delete[] arr;
 	}
+	TEST_F(ARR, sortBubble) {
+		int const size = 7;
+		list->size = size;
+		int val[size] = { 5, 6, 2, 0, 1, 4, 3 };
+		int valSortedAscend[size] = { 0, 1, 2, 3, 4, 5, 6 };
+		int valSortedDescend[size] = { 6, 5, 4, 3, 2, 1, 0 };
+
+		list->sortBubble(val, 'a');
+		for (int i = 0; i < size; i++) {
+			ASSERT_EQ(valSortedAscend[i], val[i]);
+		}
+		list->sortBubble(val, 'd');
+		for (int i = 0; i < size; i++) {
+			ASSERT_EQ(valSortedDescend[i], val[i]);
+		}
+	}
+	TEST_F(ARR, sortSelection) {
+		int const size = 7;
+		list->size = size;
+		int val[size] = { 5, 6, 2, 0, 1, 4, 3 };
+		int valSortedAscend[size] = { 0, 1, 2, 3, 4, 5, 6 };
+		int valSortedDescend[size] = { 6, 5, 4, 3, 2, 1, 0 };
+
+		list->sortSelection(val, 'a');
+		for (int i = 0; i < size; i++) {
+			ASSERT_EQ(valSortedAscend[i], val[i]);
+		}
+		list->sortSelection(val, 'd');
+		for (int i = 0; i < size; i++) {
+			ASSERT_EQ(valSortedDescend[i], val[i]);
+		}
+	}
+	TEST_F(ARR, sortInsertion) {
+		int const size = 7;
+		list->size = size;
+		int val[size] = { 5, 6, 2, 0, 1, 4, 3 };
+		int valSortedAscend[size] = { 0, 1, 2, 3, 4, 5, 6 };
+		int valSortedDescend[size] = { 6, 5, 4, 3, 2, 1, 0 };
+
+		list->sortInsertion(val, 'a');
+		for (int i = 0; i < size; i++) {
+			ASSERT_EQ(valSortedAscend[i], val[i]);
+		}
+		list->sortInsertion(val, 'd');
+		for (int i = 0; i < size; i++) {
+			ASSERT_EQ(valSortedDescend[i], val[i]);
+		}
+	}
+	TEST_F(ARR, sortMerge) {
+		int const size = 7;
+		list->size = size;
+		int val[size] = { 5, 6, 2, 0, 1, 4, 3 };
+		int valSortedAscend[size] = { 0, 1, 2, 3, 4, 5, 6 };
+		int valSortedDescend[size] = { 6, 5, 4, 3, 2, 1, 0 };
+
+		list->sortMerge(val, 'a');
+		for (int i = 0; i < size; i++) {
+			ASSERT_EQ(valSortedAscend[i], val[i]);
+		}
+		list->sortMerge(val, 'd');
+		for (int i = 0; i < size; i++) {
+			ASSERT_EQ(valSortedDescend[i], val[i]);
+		}
+	}
+
 }
 

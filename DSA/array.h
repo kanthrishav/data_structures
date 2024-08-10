@@ -90,9 +90,123 @@ public:
 		return;
 	}
 
-	void sortBubble(int* arr, char a_) {}
-	void sortSelection(int* arr, char a_) {}
-	void sortInsertion(int* arr, char a_) {}
+	void sortBubble(int* arr, char a_) {
+		int temp;
+		int i;
+		int passCount = 10;
+		int end = size;
+		while (passCount > 0) {
+			passCount = 0;
+			for (i = 1; i < end; i++) {
+				if (a_ == 'a') {
+					if (arr[i - 1] > arr[i]) {
+						temp = arr[i - 1];
+						arr[i - 1] = arr[i];
+						arr[i] = temp;
+						passCount += 1;
+					}
+				}
+				else if (a_ == 'd') {
+					if (arr[i - 1] < arr[i]) {
+						temp = arr[i - 1];
+						arr[i - 1] = arr[i];
+						arr[i] = temp;
+						passCount += 1;
+					}
+				}
+			}
+			if(passCount > 0)
+				end--;
+		}
+	}
+	void sortSelection(int* arr, char a_) {
+		int temp;
+		int i;
+		int min = 10000;
+		int max = -10000;
+		int minIndex;
+		int maxIndex;
+		int begin = 0;
+		while (begin < size) {
+			min = 10000;
+			max = -10000;
+			for (i = begin; i < size; i++) {
+				if (a_ == 'a') {
+					if (arr[i] < min) {
+						min = arr[i];
+						minIndex = i;
+					}
+				}
+				else if (a_ == 'd') {
+					if (arr[i] > max) {
+						max = arr[i];
+						maxIndex = i;
+					}
+				}
+			}
+			if (a_ == 'a') {
+				if (minIndex != begin) {
+					temp = arr[minIndex];
+					arr[minIndex] = arr[begin];
+					arr[begin] = temp;
+				}
+			}	
+			else if (a_ == 'd') {
+				if (maxIndex != begin) {
+					temp = arr[maxIndex];
+					arr[maxIndex] = arr[begin];
+					arr[begin] = temp;
+				}
+			}
+			begin++;
+		}
+	}
+	void sortInsertion(int* arr, char a_) {
+		int temp; 
+		int temp2;
+		int i;
+		int subArraySize = 1;
+		while (subArraySize != size) {		
+			for (i = 0; i < subArraySize; i++) {
+
+				if (a_ == 'a') {
+					if (arr[subArraySize] > arr[i] && arr[subArraySize] <= arr[i + 1] && subArraySize > 1) {
+						temp = arr[subArraySize];
+						for (int j = subArraySize; j > i + 1; j--)
+							arr[j] = arr[j-1];
+						arr[i + 1] = temp;
+						break;
+					}
+					else if (arr[subArraySize] <= arr[0]) {
+						temp = arr[subArraySize];
+						for (int j = subArraySize; j > 0; j--)
+							arr[j] = arr[j-1];
+						arr[0] = temp;
+						break;
+					}
+				}
+				else if (a_ == 'd') {
+					if (arr[subArraySize] < arr[i] && arr[subArraySize] >= arr[i + 1] && subArraySize > 1) {
+						temp = arr[subArraySize];
+						for (int j = subArraySize; j > i + 1; j--)
+							arr[j] = arr[j - 1];
+						arr[i + 1] = temp;
+						break;
+					}
+					else if (arr[subArraySize] >= arr[0]) {
+						temp = arr[subArraySize];
+						for (int j = subArraySize; j > 0; j--)
+							arr[j] = arr[j - 1];
+						arr[0] = temp;
+						break;
+					}
+				}
+
+			}
+			subArraySize++;
+		}
+
+	}
 	void sortMerge(int* arr, char a_) {}
 	void sortQuick(int* arr, char a_) {}
 	void sortHeap(int* arr, char a_) {}
