@@ -188,11 +188,27 @@ namespace ARRAY_T {
 		int valSortedAscend[size] = { 0, 1, 2, 3, 4, 5, 6 };
 		int valSortedDescend[size] = { 6, 5, 4, 3, 2, 1, 0 };
 
-		list->sortMerge(val, 'a');
+		list->sortMerge(val, 0, size - 1, 'a');
 		for (int i = 0; i < size; i++) {
 			ASSERT_EQ(valSortedAscend[i], val[i]);
 		}
-		list->sortMerge(val, 'd');
+		list->sortMerge(val, 0, size - 1, 'd');
+		for (int i = 0; i < size; i++) {
+			ASSERT_EQ(valSortedDescend[i], val[i]);
+		}
+	}
+	TEST_F(ARR, sortQuick) {
+		int const size = 7;
+		list->size = size;
+		int val[size] = { 5, 6, 2, 0, 1, 4, 3 };
+		int valSortedAscend[size] = { 0, 1, 2, 3, 4, 5, 6 };
+		int valSortedDescend[size] = { 6, 5, 4, 3, 2, 1, 0 };
+
+		list->sortQuick(val, 0, size - 1, 'a');
+		for (int i = 0; i < size; i++) {
+			ASSERT_EQ(valSortedAscend[i], val[i]);
+		}
+		list->sortQuick(val, 0, size - 1, 'd');
 		for (int i = 0; i < size; i++) {
 			ASSERT_EQ(valSortedDescend[i], val[i]);
 		}

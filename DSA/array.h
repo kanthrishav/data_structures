@@ -95,24 +95,16 @@ public:
 		int i;
 		int passCount = 10;
 		int end = size;
+		bool comparison;
 		while (passCount > 0) {
 			passCount = 0;
 			for (i = 1; i < end; i++) {
-				if (a_ == 'a') {
-					if (arr[i - 1] > arr[i]) {
-						temp = arr[i - 1];
-						arr[i - 1] = arr[i];
-						arr[i] = temp;
-						passCount += 1;
-					}
-				}
-				else if (a_ == 'd') {
-					if (arr[i - 1] < arr[i]) {
-						temp = arr[i - 1];
-						arr[i - 1] = arr[i];
-						arr[i] = temp;
-						passCount += 1;
-					}
+				comparison = (a_ == 'a') ? ((arr[i - 1] >= arr[i]) ? true : false) : ((arr[i - 1] <= arr[i]) ? true : false);
+				if (comparison) {
+					temp = arr[i - 1];
+					arr[i - 1] = arr[i];
+					arr[i] = temp;
+					passCount += 1;
 				}
 			}
 			if(passCount > 0)
@@ -166,49 +158,83 @@ public:
 		int temp2;
 		int i;
 		int subArraySize = 1;
+		bool comparison1, comparison2;
 		while (subArraySize != size) {		
 			for (i = 0; i < subArraySize; i++) {
 
 				if (a_ == 'a') {
-					if (arr[subArraySize] > arr[i] && arr[subArraySize] <= arr[i + 1] && subArraySize > 1) {
-						temp = arr[subArraySize];
-						for (int j = subArraySize; j > i + 1; j--)
-							arr[j] = arr[j-1];
-						arr[i + 1] = temp;
-						break;
-					}
-					else if (arr[subArraySize] <= arr[0]) {
-						temp = arr[subArraySize];
-						for (int j = subArraySize; j > 0; j--)
-							arr[j] = arr[j-1];
-						arr[0] = temp;
-						break;
-					}
+					comparison1 = (arr[subArraySize] > arr[i] && arr[subArraySize] <= arr[i + 1] && subArraySize > 1) ? true : false;
+					comparison2 = (arr[subArraySize] <= arr[0]) ? true : false;
 				}
 				else if (a_ == 'd') {
-					if (arr[subArraySize] < arr[i] && arr[subArraySize] >= arr[i + 1] && subArraySize > 1) {
-						temp = arr[subArraySize];
-						for (int j = subArraySize; j > i + 1; j--)
-							arr[j] = arr[j - 1];
-						arr[i + 1] = temp;
-						break;
-					}
-					else if (arr[subArraySize] >= arr[0]) {
-						temp = arr[subArraySize];
-						for (int j = subArraySize; j > 0; j--)
-							arr[j] = arr[j - 1];
-						arr[0] = temp;
-						break;
-					}
+					comparison1 = (arr[subArraySize] < arr[i] && arr[subArraySize] >= arr[i + 1] && subArraySize > 1) ? true : false;
+					comparison2 = (arr[subArraySize] >= arr[0]) ? true : false;
 				}
-
+				if (comparison1) {
+					temp = arr[subArraySize];
+					for (int j = subArraySize; j > i + 1; j--)
+						arr[j] = arr[j - 1];
+					arr[i + 1] = temp;
+					break;
+				}
+				else if (comparison2) {
+					temp = arr[subArraySize];
+					for (int j = subArraySize; j > 0; j--)
+						arr[j] = arr[j - 1];
+					arr[0] = temp;
+					break;
+				}
 			}
 			subArraySize++;
 		}
 
 	}
-	void sortMerge(int* arr, char a_) {}
-	void sortQuick(int* arr, char a_) {}
+	void SortedMerge(int* arr, int start1, int end1, int start2, int end2, char a_) {
+		int leftSize = end1 - start1 + 1;
+		int rightSize = end2 - start2 + 1;
+		int* left = new int[leftSize] {};
+		int* right = new int[rightSize] {};
+		bool comparison;
+
+		int count;
+
+		for (int i = start1, count = 0; i <= end1 && count < leftSize; i++, count++)
+			left[count] = arr[i];
+		for (int i = start2, count = 0; i <= end2 && count < rightSize; i++, count++)
+			right[count] = arr[i];
+
+		int c1 = 0, c2 = 0, i = start1;
+		while ((c1 < leftSize) && (c2 < rightSize)) {
+			comparison = (a_ == 'a') ? ((left[c1] < right[c2]) ? true : false) : ((left[c1] > right[c2]) ? true : false);
+			arr[i++] = comparison ? left[c1++] : right[c2++];
+		}
+
+		if (c1 == leftSize) {
+			while (i <= end2)
+				arr[i++] = right[c2++];
+		}
+		else if (c2 == rightSize) {
+			while (i <= end2)
+				arr[i++] = left[c1++];
+		}
+
+		delete[] left;
+		delete[] right;
+	}
+	void sortMerge(int* arr, int start, int end, char a_) {
+		if (start >= end) {
+			return;
+		}
+
+		int mid = start + ((int)((end - start)/ 2.0));
+		
+		sortMerge(arr, start, mid, a_);
+		sortMerge(arr, mid+1, end, a_);
+
+		SortedMerge(arr, start, mid, mid + 1, end, a_);
+
+	}
+	void sortQuick(int* arr, int start, int end, char a_) {}
 	void sortHeap(int* arr, char a_) {}
 
 	bool linearSearch(int* arr, int n) {}
