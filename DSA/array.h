@@ -1,5 +1,3 @@
-#pragma once
-
 #include <iostream>
 
 class Array {
@@ -234,7 +232,8 @@ public:
 		SortedMerge(arr, start, mid, mid + 1, end, a_);
 
 	}
-	void sortQuick(int* arr, int start, int end, char a_) {}
+	void sortQuick(int* arr, int start, int end, char a_) {
+	}
 	void sortHeap(int* arr, char a_) {}
 
 	bool linearSearch(int* arr, int n) {}
