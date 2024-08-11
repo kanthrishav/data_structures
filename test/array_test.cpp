@@ -232,6 +232,234 @@ namespace ARRAY_T {
 			ASSERT_EQ(valSortedDescend[i], val2[i]);
 		}
 	}
+	TEST_F(ARR, findIntersection) {
+		int const size = 7;
+		list->size = size;
+		int val1[size] = { 5, 6, 2, 0, 1, 4, 3 };
+		int val2[size-1] = { 8, 9, 0, 1, 4, 3 };
+		int val3[size] = { 8, 7, 2, 0, 3, 4, 1 };
+		int* result = new int[4];
+		int found = list->findIntersection(val1, val2, size, size-1, result);
+		ASSERT_EQ(found, 3);
+		ASSERT_EQ(result[0], 0);
+		ASSERT_EQ(result[1], 1);
+		ASSERT_EQ(result[2], 4);
+		ASSERT_EQ(result[3], 3);
+		delete[] result;
+		result = new int[4];
+		found = list->findIntersection(val2, val3, size-1, size, result);
+		ASSERT_EQ(found, -1);
+		delete[] result;
+	}
+	TEST_F(ARR, findUnion) {
+		int const size = 7;
+		list->size = size;
+		int val1[size] = { 5, 6, 2, 0, 1, 4, 3 };
+		int val2[4] = { 5, 6, 2, 0 };
+		int val3[4] = { 1, 4, 3, 4 };
+		int* result = new int[7];
+		list->findUnion(val2, val3, 4, 4, result);
+		for (int j = 0; j < size; j++) {
+			ASSERT_EQ(result[j], val1[j]);
+		}
+		delete[] result;
+	}
+	TEST_F(ARR, checkPallindrome) {
+		int const size = 7;
+		list->size = size;
+		int val1[size] = { 5, 6, 2, 0, 2, 6, 5 };
+		bool found = list->checkPallindrome(val1);
+		ASSERT_EQ(found, true);
+		int val2[size] = { 0, 2, 6, 1, 6, 1, 0};
+		found = list->checkPallindrome(val2);
+		ASSERT_EQ(found, false);
+	}
+	TEST_F(ARR, checkKthLargestElement) {
+		int const size = 7;
+		list->size = size;
+		int val1[size] = { 5, 6, 2, 0, 1, 4, 3 };
+		
+		int k = 1;
+		int expectedKthLargest = 6;
+		int kLarge = list->findKthLargestElement(val1, k);
+		ASSERT_EQ(kLarge, expectedKthLargest);
 
+		k = 2;
+		expectedKthLargest = 5;
+		kLarge = list->findKthLargestElement(val1, k);
+		ASSERT_EQ(kLarge, expectedKthLargest);
+
+		k = 5;
+		expectedKthLargest = 2;
+		kLarge = list->findKthLargestElement(val1, k);
+		ASSERT_EQ(kLarge, expectedKthLargest);
+	}
+	TEST_F(ARR, checkKthSmallestElement) {
+		int const size = 7;
+		list->size = size;
+		int val1[size] = { 5, 6, 2, 0, 1, 4, 3 };
+
+		int k = 1;
+		int expectedKthLargest = 0;
+		int kLarge = list->findKthSmallestElement(val1, k);
+		ASSERT_EQ(kLarge, expectedKthLargest);
+
+		k = 2;
+		expectedKthLargest = 1;
+		kLarge = list->findKthSmallestElement(val1, k);
+		ASSERT_EQ(kLarge, expectedKthLargest);
+
+		k = 5;
+		expectedKthLargest = 4;
+		kLarge = list->findKthSmallestElement(val1, k);
+		ASSERT_EQ(kLarge, expectedKthLargest);
+	}
+	TEST_F(ARR, getSubArrayWithSpecificSum) {
+		int const size = 7;
+		list->size = size;
+		int val1[size] = { 5, 6, 2, 0, 1, 4, 3 };
+		int* result;
+
+		int sum = 1;
+		int resultSize = 2;
+		int * expectedResult = new int[resultSize]{ 0, 1 };
+		result = new int[resultSize];
+		list->getSubArrayWithSpecificSum(val1, sum, result);
+		for (int i = 0; i < resultSize; i++) {
+			ASSERT_EQ(result[i], expectedResult[i]);
+		}
+		delete[] result;
+		delete[] expectedResult;
+
+		sum = 9;
+		resultSize = 4;
+		expectedResult = new int[resultSize]{ 6, 2, 0, 1 };
+		result = new int[resultSize];
+		list->getSubArrayWithSpecificSum(val1, sum, result);
+		for (int i = 0; i < resultSize; i++) {
+			ASSERT_EQ(result[i], expectedResult[i]);
+		}
+		delete[] result;
+		delete[] expectedResult;
+
+		sum = 12;
+		result = new int[resultSize];
+		list->getSubArrayWithSpecificSum(val1, sum, result);
+		ASSERT_EQ(result[0], -10000);
+		delete[] result;
+
+	}
+	TEST_F(ARR, getSubArrayWithSpecificProduct) {
+		int const size = 7;
+		list->size = size;
+		int val1[size] = { 5, 6, 2, 0, 1, 4, 3 };
+		int* result;
+
+		int sum = 30;
+		int resultSize = 2;
+		int* expectedResult = new int[resultSize] { 5, 6 };
+		result = new int[resultSize];
+		list->getSubArrayWithSpecificProduct(val1, sum, result);
+		for (int i = 0; i < resultSize; i++) {
+			ASSERT_EQ(result[i], expectedResult[i]);
+		}
+		delete[] result;
+		delete[] expectedResult;
+
+		sum = 0;
+		resultSize = 4;
+		expectedResult = new int[resultSize] { 5, 6, 2, 0};
+		result = new int[resultSize];
+		list->getSubArrayWithSpecificProduct(val1, sum, result);
+		for (int i = 0; i < resultSize; i++) {
+			ASSERT_EQ(result[i], expectedResult[i]);
+		}
+		delete[] result;
+		delete[] expectedResult;
+
+		sum = -1;
+		result = new int[resultSize];
+		list->getSubArrayWithSpecificProduct(val1, sum, result);
+		ASSERT_EQ(result[0], -10000);
+		delete[] result;
+
+	}
+	TEST_F(ARR, segregateElementsBasedOnSign) {
+		int const size = 7;
+		list->size = size;
+		int val[size] = { 5, -6, 2, 0, -1, 4, -3 };
+		int val1[size] = { -6, -1, -3, 5, 2, 0, 4 };
+
+		list->segregateElementsBasedOnSign(val);
+		for (int i = 0; i < size; i++) {
+			ASSERT_EQ(val[i], val1[i]);
+		}
+	}
+	TEST_F(ARR, segregateElementsBasedOnEvenOdd) {
+		int const size = 7;
+		list->size = size;
+		int val[size] = { 5, 6, 2, 0, 1, 4, 3 };
+		int val1[size] = { 5, 1, 3, 6, 2, 0, 4 };
+
+		list->segregateElementsBasedOnEvenOdd(val);
+		for (int i = 0; i < size; i++) {
+			ASSERT_EQ(val[i], val1[i]);
+		}
+	}
+	TEST_F(ARR, findCommonElementsInThreeSortedArrays) {
+		int const size = 7;
+		list->size = size;
+		int val[size] = { 5, 6, 2, 0, 1, 4, 3 };
+		int val1[size-1] = { 1, 7, 10, 11, 5, 0};
+		int val2[size] = { 1, 7, 9, -10, -1, 5, 0 };
+		int* result = new int[3];
+		int expected[3] = {5, 0, 1};
+		list->findCommonElementsInThreeSortedArrays(val, val1, val2, size, size-1, size, result);
+		for (int i = 0; i < 3; i++) {
+			ASSERT_EQ(result[i], expected[i]);
+		}
+		delete[] result;
+	}
+	TEST_F(ARR, rearrangeWithAlternatingSign) {
+		int const size = 7;
+		list->size = size;
+		int val[size] = { 5, -6, 2, 0, -1, 4, -3 };
+		int val1[size] = { 5, -6, 2, -1, 0, -3, 4 };
+
+		list->rearrangeWithAlternatingSign(val);
+		for (int i = 0; i < size; i++) {
+			ASSERT_EQ(val[i], val1[i]);
+		}
+	}
+	TEST_F(ARR, findLargestSumContiguousSubArray) {
+		int const size = 7;
+		list->size = size;
+		int val1[size] = { 5, -6, 2, 0, 1, 4, -3 };
+		int* result;
+
+		int resultSize = 4;
+		int expectedResult[4] = {2, 0, 1, 4};
+		result = new int[resultSize];
+		list->findLargestSumContiguousSubArray(val1, result);
+		for (int i = 0; i < resultSize; i++) {
+			ASSERT_EQ(result[i], expectedResult[i]);
+		}
+		delete[] result;
+	}
+	TEST_F(ARR, findLargestProductContiguousSubArray) {
+		int const size = 7;
+		list->size = size;
+		int val1[size] = { 5, -6, 2, 0, 1, 4, -3 };
+		int* result;
+
+		int resultSize = 1;
+		int expectedResult[1] = { 5 };
+		result = new int[resultSize];
+		list->findLargestProductContiguousSubArray(val1, result);
+		for (int i = 0; i < resultSize; i++) {
+			ASSERT_EQ(result[i], expectedResult[i]);
+		}
+		delete[] result;
+	}
 }
 

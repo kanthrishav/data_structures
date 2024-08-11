@@ -341,20 +341,323 @@ public:
 	bool linearSearch(int* arr, int n) {}
 	bool binarySearch(int * arr, int n) {}
 
-	int * findIntersection(int* arr1, int* arr2) {}
-	int* findUnion(int* arr1, int* arr2) {}
-	bool checkPallindrome(int* arr) {}
-	int findKthLargestElement(int* arr, int k) {}
-	int findKthSmallestElement(int* arr, int k) {}
-	int* getSubArrayWithSpecificSum(int* arr, int sum) {}
-	int* getSubArrayWithSpecificProduct(int* arr, int product) {}
-	void segregateElementsBasedOnSign(int* arr) {}
-	void segregateElementsBasedOnEvenOdd(int* arr) {}
-	int countPairsWithSpecificSum(int* arr, int sum) {}
-	int * findCommonElementsInThreeSortedArrays(int* arr1, int* arr2, int* arr3) {}
-	void rearrangeWithAlternatingSign(int* arr) {}
-	int* findLargestSumContiguousSubArray(int* arr) {}
-	int* findLargestProductContiguousSubArray(int* arr) {}
+	int findIntersection(int* arr1, int* arr2, int size1, int size2, int * result) {
+		int i, j, k, l;
+		int count = 0, foundSum = 0;
+		for (i = 0; i < size1; i++) {
+			for (j = 0; j < size2; j++) {
+				if (arr1[i] == arr2[j]) {
+					foundSum = 0;
+					count = 0;
+					for (k = i, l = j; k < size1 && l < size2; k++, l++) {
+						if (arr1[k] == arr2[l]) {
+							result[foundSum] = arr1[k];
+							foundSum++;
+						}
+						count++;
+					}
+					if (count == foundSum && count > 1)
+						return i;
+				}
+			}
+		}
+
+		return -1;
+	}
+	void findUnion(int* arr1, int* arr2, int size1, int size2, int* result) {
+		int i = 0, j = 0, k = 0, c = 0;
+		bool present;
+		while (i < size1) {
+			present = false;
+			for (k = 0; k < c; k++) {
+				if (arr1[i] == result[k])
+					present = true;
+			}
+			if (!present) {
+				result[c] = arr1[i];
+				c++;
+			}
+			i++;
+		}
+		while (j < size2) {
+			present = false;
+			for (k = 0; k < c; k++) {
+				if (arr2[j] == result[k])
+					present = true;
+			}
+			if (!present) {
+				result[c] = arr2[j];
+				c++;
+			}
+			j++;
+		}
+	}
+	bool checkPallindrome(int* arr) {
+		int* rev = new int[size];
+		for (int i = 0; i < size; i++)
+			rev[i] = arr[i];
+		reverse(rev);
+		for (int i = 0; i < size; i++) {
+			if (rev[i] != arr[i])
+				return false;
+		}
+		return true;
+	}
+	int findKthLargestElement(int* arr, int k) {
+		sortSelection(arr, 'd');
+		return(arr[k - 1]);
+	}
+	int findKthSmallestElement(int* arr, int k) {
+		sortBubble(arr, 'a');
+		return(arr[k - 1]);
+	}
+	void getSubArrayWithSpecificSum(int* arr, int sum, int * result) {
+		int sumIter = 0;
+		int start = 0;
+		int i, j, k, l;
+		bool found = false;
+		while (start < size) {
+			sumIter = 0;
+			for (i = start; i < size; i++) {
+				sumIter += arr[i];
+				if (sumIter == sum) {
+					found = true;
+					break;
+				}
+			}
+			if (found)
+				break;
+			start++;
+		}
+
+		int count = 0;
+		if (found) {
+			for (j = start; j <= i; j++) {
+				result[count] = arr[j];
+				count++;
+			}
+		}
+		else {
+			result[count] = -10000;
+		}
+	}
+	void getSubArrayWithSpecificProduct(int* arr, int product, int * result) {
+		int sumIter = 1;
+		int start = 0;
+		int i, j, k, l;
+		bool found = false;
+		while (start < size) {
+			sumIter = 1;
+			for (i = start; i < size; i++) {
+				sumIter *= arr[i];
+				if (sumIter == product) {
+					found = true;
+					break;
+				}
+			}
+			if (found)
+				break;
+			start++;
+		}
+
+		int count = 0;
+		if (found) {
+			for (j = start; j <= i; j++) {
+				result[count] = arr[j];
+				count++;
+			}
+		}
+		else {
+			result[count] = -10000;
+		}
+
+	}
+	void segregateElementsBasedOnSign(int* arr) {
+		int countPositive = 0, countNegative = 0;
+		int i, j;
+		for (i = 0; i < size; i++) {
+			if (arr[i] < 0)
+				countNegative++;
+			else
+				countPositive++;
+		}
+		int* pos = new int[countPositive];
+		int* neg = new int[countNegative];
+		int nc = 0, pc = 0;
+		for (i = 0; i < size; i++) {
+			if (arr[i] < 0)
+				neg[nc++] = arr[i];
+			else 
+				pos[pc++] = arr[i];
+		}
+
+		for (i = 0; i < countNegative; i++)
+			arr[i] = neg[i];
+		
+		for (j = 0; j < countPositive; j++)
+			arr[i++] = pos[j];
+
+		delete[] pos;
+		delete[] neg;
+	}
+	void segregateElementsBasedOnEvenOdd(int* arr) {
+		int countEven = 0, countOdd = 0;
+		int i, j;
+		for (i = 0; i < size; i++) {
+			if (arr[i] % 2 != 0)
+				countOdd++;
+			else
+				countEven++;
+		}
+		int* even = new int[countEven];
+		int* odd = new int[countOdd];
+		int nc = 0, pc = 0;
+		for (i = 0; i < size; i++) {
+			if (arr[i] % 2 != 0)
+				odd[nc++] = arr[i];
+			else
+				even[pc++] = arr[i];
+		}
+
+		for (i = 0; i < countOdd; i++)
+			arr[i] = odd[i];
+
+		for (j = 0; j < countEven; j++)
+			arr[i++] = even[j];
+
+		delete[] even;
+		delete[] odd;
+	}
+	void findCommonElementsInThreeSortedArrays(int* arr1, int* arr2, int* arr3, int size1, int size2, int size3, int * result) {
+		
+		int* common;
+		int common12 = 0;
+		int* common2;
+		int common23 = 0;
+		int count = 0;
+		int i, j;
+		for (i = 0; i < size1; i++) {
+			for (j = 0; j < size2; j++) {
+				if (arr1[i] == arr2[j])
+					common12++;
+			}
+		}
+		
+		common = new int[common12];
+		for (i = 0; i < size1; i++) {
+			for (j = 0; j < size2; j++) {
+				if (arr1[i] == arr2[j])
+					common[count++] = arr1[i];
+			}
+		}
+
+		for (i = 0; i < common12; i++) {
+			for (j = 0; j < size3; j++) {
+				if (common[i] == arr3[j])
+					common23++;
+			}
+		}
+
+		common2 = new int[common23];
+		count = 0;
+		for (i = 0; i < common12; i++) {
+			for (j = 0; j < size3; j++) {
+				if (common[i] == arr3[j])
+					result[count++] = common[i];
+			}
+		}
+		delete[] common;
+		delete[] common2;
+	}
+	void rearrangeWithAlternatingSign(int* arr) {
+		int countPositive = 0, countNegative = 0;
+		int i, j;
+		for (i = 0; i < size; i++) {
+			if (arr[i] < 0)
+				countNegative++;
+			else
+				countPositive++;
+		}
+		int* pos = new int[countPositive];
+		int* neg = new int[countNegative];
+		int nc = 0, pc = 0;
+		for (i = 0; i < size; i++) {
+			if (arr[i] < 0)
+				neg[nc++] = arr[i];
+			else
+				pos[pc++] = arr[i];
+		}
+		pc = 0;
+		nc = 0;
+		for (i = 0; i < size && pc < countPositive && nc < countNegative; i++) {
+			if (i % 2 == 0) {
+				arr[i] = pos[pc++];
+			}
+			else {
+				arr[i] = neg[nc++];
+			}
+		}
+
+		if (i < size && pc == countPositive) {
+			while(nc < countNegative)
+				arr[i++] = neg[nc++];
+		}
+		else if (i < size && nc == countNegative) {
+			while (pc < countPositive)
+				arr[i++] = pos[pc++];
+		}
+
+		delete[] pos;
+		delete[] neg;
+	}
+	void findLargestSumContiguousSubArray(int* arr, int * result) {
+		int sumIter = 0;
+		int start = 0;
+		int count = 0;
+		int i;
+		int maxSum = -10000;
+		int maxSumStart;
+		int maxSumEnd;
+		while (start < size) {
+			sumIter = 0;
+			for (i = start; i < size; i++) {
+				sumIter += arr[i];
+				if (sumIter > maxSum) {
+					maxSum = sumIter;
+					maxSumStart = start;
+					maxSumEnd = i;
+				}
+			}
+			start++;
+		}
+
+		for (i = maxSumStart; i <= maxSumEnd; i++)
+			result[count++] = arr[i];
+	}
+	void findLargestProductContiguousSubArray(int* arr, int * result) {
+		int sumIter = 1;
+		int start = 0;
+		int count = 0;
+		int i;
+		int maxSum = -10000;
+		int maxProductStart;
+		int maxProductEnd;
+		while (start < size) {
+			sumIter = 1;
+			for (i = start; i < size; i++) {
+				sumIter *= arr[i];
+				if (sumIter > maxSum) {
+					maxSum = sumIter;
+					maxProductStart = start;
+					maxProductEnd = i;
+				}
+			}
+			start++;
+		}
+
+		for (i = maxProductStart; i <= maxProductEnd; i++)
+			result[count++] = arr[i];
+	}
 
 };
 
