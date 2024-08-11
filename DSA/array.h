@@ -233,8 +233,110 @@ public:
 
 	}
 	void sortQuick(int* arr, int start, int end, char a_) {
+		if (start >= end)
+			return;
+
+		int pivotIndex = end;
+		int iter = 0, leftIter = 0;
+		int temp;
+		bool comparison;
+		while (iter < pivotIndex) {
+			comparison = (a_ == 'a') ? ((arr[iter] <= arr[pivotIndex]) ? true : false) : ((arr[iter] >= arr[pivotIndex]) ? true : false);
+			if (comparison) {
+				if (iter == leftIter) {
+					leftIter++;
+					iter++;
+				}
+				else {
+					temp = arr[leftIter];
+					arr[leftIter] = arr[iter];
+					arr[iter] = temp;
+					leftIter++;
+					iter++;
+				}
+			}
+			else {
+				iter++;
+			}
+		}
+		temp = arr[pivotIndex];
+		arr[pivotIndex] = arr[leftIter];
+		arr[leftIter] = temp;
+		pivotIndex = leftIter;
+
+		sortQuick(arr, start, pivotIndex - 1, a_);
+		sortQuick(arr, pivotIndex + 1, end, a_);
 	}
-	void sortHeap(int* arr, char a_) {}
+	void sortHeap(int* arr, char a_) {
+		int l, r, i, temp;
+		int lastLeafNode = (size / 2.0) - 1;
+		int maxId = (2*lastLeafNode+2 > (size-1)) ? (2*lastLeafNode + 1) : (2*lastLeafNode + 2);
+		int passCount = 10;
+		bool leftChildComparison, rightChildComparison;
+		int min = 10000;
+		int max = -10000;
+		if (a_ == 'a') {
+			for (i = 0; i < size; i++) {
+				if (arr[i] < min)
+					min = arr[i];
+			}
+		}
+		else if (a_ == 'd') {
+			for (i = 0; i < size; i++) {
+				if (arr[i] > max)
+					max = arr[i];
+			}
+		}
+
+		while (passCount > 0) {
+			passCount = 0;
+			for (i = lastLeafNode; i >= 0; i--) {
+				l = 2 * i + 1;
+				r = l + 1;
+				if (a_ == 'a') {
+					leftChildComparison = (arr[l] > arr[i] && arr[l] > arr[r] && (l <= maxId)) ? true : false;
+					rightChildComparison = (arr[r] > arr[i] && arr[r] > arr[l] && (r <= maxId)) ? true : false;
+				}
+				else if (a_ == 'd') {
+					leftChildComparison = (arr[l] < arr[i] && arr[l] < arr[r] && (l <= maxId)) ? true : false;
+					rightChildComparison = (arr[r] < arr[i] && arr[r] < arr[l] && (r <= maxId)) ? true : false;
+				}
+				if (leftChildComparison) {
+					temp = arr[l];
+					arr[l] = arr[i];
+					arr[i] = temp;
+					passCount++;
+				}
+				else if (rightChildComparison) {
+					temp = arr[r];
+					arr[r] = arr[i];
+					arr[i] = temp;
+					passCount++;
+				}
+			}
+
+			if (passCount > 0) {
+				temp = arr[0];
+				arr[0] = arr[maxId];
+				arr[maxId] = temp;
+				maxId--;
+			}
+			else {
+				if (a_ == 'a' && arr[0] != min) {
+					temp = arr[0];
+					arr[0] = arr[maxId];
+					arr[maxId] = temp;
+					passCount = 1;
+				}
+				else if (a_ == 'd' && arr[0] != max) {
+					temp = arr[0];
+					arr[0] = arr[maxId];
+					arr[maxId] = temp;
+					passCount = 1;
+				}
+			}
+		}
+	}
 
 	bool linearSearch(int* arr, int n) {}
 	bool binarySearch(int * arr, int n) {}

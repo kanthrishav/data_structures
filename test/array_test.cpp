@@ -213,6 +213,25 @@ namespace ARRAY_T {
 			ASSERT_EQ(valSortedDescend[i], val[i]);
 		}
 	}
+	TEST_F(ARR, sortHeap) {
+		int const size = 7;
+		list->size = size;
+		int val[size] = { 5, 6, 2, 0, 1, 4, 3 };
+		int valSortedAscend[size] = { 0, 1, 2, 3, 4, 5, 6 };
+		int valSortedDescend[size] = { 6, 5, 4, 3, 2, 1, 0 };
+
+		list->sortHeap(val, 'a');
+		for (int i = 0; i < size; i++) {
+			ASSERT_EQ(valSortedAscend[i], val[i]);
+		}
+
+		int val2[size] = { 5, 6, 2, 0, 1, 4, 3 };
+
+		list->sortHeap(val2, 'd');
+		for (int i = 0; i < size; i++) {
+			ASSERT_EQ(valSortedDescend[i], val2[i]);
+		}
+	}
 
 }
 
