@@ -83,5 +83,137 @@ namespace STACK_T {
 		std::string valRet4 = list->getLongestValidParanthesis(valStr);
 		ASSERT_EQ(valRet4, "{a + [e+f*h - g]}");
 	}
+	TEST_F(STK, reverseIndividualWords) {
+		std::string valStr = "I am in a Belise.";
+		std::string valRet4 = list->reverseIndividualWords(valStr);
+		ASSERT_EQ(valRet4, "I ma ni a esileB.");
+		valStr = "You might !see some C++ programs that use? the size():";
+		valRet4 = list->reverseIndividualWords(valStr);
+		ASSERT_EQ(valRet4, "uoY thgim !ees emos ++C smargorp taht ?esu eht ()ezis:");
+	}
+	TEST_F(STK, evaluatePostfixExpression) {
+		std::string valStr = "231*+9-";
+		int valRet4 = list->evaluatePostfixExpression(valStr);
+		ASSERT_EQ(valRet4, -4);
+	}
+	TEST_F(STK, sortBubble) {
+		int const size = 7;
+		int val[size] = { 5, 6, 2, 0, 1, 4, 3 };
+		int valSortedAscend[size] = { 0, 1, 2, 3, 4, 5, 6 };
+		int valSortedDescend[size] = { 6, 5, 4, 3, 2, 1, 0 };
+		int i;
+		for (i = 0; i < size; i++) {
+			list->push(val[i]);
+		}
+
+		list->sortBubble('a');
+		for (int i = 0; i < size; i++) {
+			ASSERT_EQ(valSortedAscend[i], list->elements[i]);
+		}
+		list->sortBubble('d');
+		for (int i = 0; i < size; i++) {
+			ASSERT_EQ(valSortedDescend[i], list->elements[i]);
+		}
+	}
+	TEST_F(STK, sortSelection) {
+		int const size = 7;
+		int val[size] = { 5, 6, 2, 0, 1, 4, 3 };
+		int valSortedAscend[size] = { 0, 1, 2, 3, 4, 5, 6 };
+		int valSortedDescend[size] = { 6, 5, 4, 3, 2, 1, 0 };
+		int i;
+		for (i = 0; i < size; i++) {
+			list->push(val[i]);
+		}
+
+		list->sortSelection('a');
+		for (int i = 0; i < size; i++) {
+			ASSERT_EQ(valSortedAscend[i], list->elements[i]);
+		}
+		list->sortBubble('d');
+		for (int i = 0; i < size; i++) {
+			ASSERT_EQ(valSortedDescend[i], list->elements[i]);
+		}
+	}
+	TEST_F(STK, sortInsertion) {
+		int const size = 7;
+		int val[size] = { 5, 6, 2, 0, 1, 4, 3 };
+		int valSortedAscend[size] = { 0, 1, 2, 3, 4, 5, 6 };
+		int valSortedDescend[size] = { 6, 5, 4, 3, 2, 1, 0 };
+		int i;
+		for (i = 0; i < size; i++) {
+			list->push(val[i]);
+		}
+
+		list->sortInsertion('a');
+		for (int i = 0; i < size; i++) {
+			ASSERT_EQ(valSortedAscend[i], list->elements[i]);
+		}
+		list->sortBubble('d');
+		for (int i = 0; i < size; i++) {
+			ASSERT_EQ(valSortedDescend[i], list->elements[i]);
+		}
+	}
+	TEST_F(STK, sortMerge) {
+		int const size = 7;
+		int val[size] = { 5, 6, 2, 0, 1, 4, 3 };
+		int valSortedAscend[size] = { 0, 1, 2, 3, 4, 5, 6 };
+		int valSortedDescend[size] = { 6, 5, 4, 3, 2, 1, 0 };
+		int i;
+		for (i = 0; i < size; i++) {
+			list->push(val[i]);
+		}
+
+		list->sortMerge(0, list->topIndex, 'a');
+		for (int i = 0; i < size; i++) {
+			ASSERT_EQ(valSortedAscend[i], list->elements[i]);
+		}
+		list->sortMerge(0, list->topIndex, 'd');
+		for (int i = 0; i < size; i++) {
+			ASSERT_EQ(valSortedDescend[i], list->elements[i]);
+		}
+	}
+	TEST_F(STK, sortQuick) {
+		int const size = 7;
+		int val[size] = { 5, 6, 2, 0, 1, 4, 3 };
+		int valSortedAscend[size] = { 0, 1, 2, 3, 4, 5, 6 };
+		int valSortedDescend[size] = { 6, 5, 4, 3, 2, 1, 0 };
+		int i;
+		for (i = 0; i < size; i++) {
+			list->push(val[i]);
+		}
+
+		list->sortQuick(0, list->topIndex, 'a');
+		for (int i = 0; i < size; i++) {
+			ASSERT_EQ(valSortedAscend[i], list->elements[i]);
+		}
+		list->sortQuick(0, list->topIndex, 'd');
+		for (int i = 0; i < size; i++) {
+			ASSERT_EQ(valSortedDescend[i], list->elements[i]);
+		}
+	}
+	TEST_F(STK, sortHeap) {
+		int const size = 7;
+		int val[size] = { 5, 6, 2, 0, 1, 4, 3 };
+		int valSortedAscend[size] = { 0, 1, 2, 3, 4, 5, 6 };
+		int valSortedDescend[size] = { 6, 5, 4, 3, 2, 1, 0 };
+		int i;
+		for (i = 0; i < size; i++) {
+			list->push(val[i]);
+		}
+
+		list->sortHeap('a');
+		for (int i = 0; i < size; i++) {
+			ASSERT_EQ(valSortedAscend[i], list->elements[i]);
+		}
+
+		int temp = list->elements[3];
+		list->elements[3] = list->elements[5];
+		list->elements[5] = temp;
+
+		list->sortHeap('d');
+		for (int i = 0; i < size; i++) {
+			ASSERT_EQ(valSortedDescend[i], list->elements[i]);
+		}
+	}
 
 }
