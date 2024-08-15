@@ -1,9 +1,11 @@
 #include <iostream>
 #include <map>
+#include <vector>
+
 class Stack {
 public:
 	int topIndex;
-	static int const MAX_SIZE = 10;
+	static int const MAX_SIZE = 100;
 	int elements[MAX_SIZE];
 	char elements_c[MAX_SIZE];
 	Stack() : topIndex(-1) {
@@ -442,80 +444,71 @@ public:
 		}
 	}
 
-	void getNextGreaterElement() {
-		// Given 
+	int searchLinear(int val) {
+		
+		for (int i = 0; i < topIndex + 1; i++) {
+			if (elements[i] == val) {
+				return(i);
+			}
+		}
+		return(-1);
 	}
-	void getNearestSmallerElement() {}
-	void getNextSmallerOfNextGreaterElement() {}
-	void deleteConsecutiveSameWordsInSequence() {}
-	void getCountOfSubArraysWhoseFirstElementIsMinimum() {}
-	void getLengthOfLongestValidSubstring() {};
-	void getNextFrequencyElement() {}
-	void getMaxDiffBetweenNearestLeftAndRightSmallerElements() {}
-	void getMaxProductOfIndicesOfNextGreaterOnLeftAnfRight() {}
-	void checkWhetherGivenPermutationIsValidStackPermutation() {}
-	void checkWhetherTwoExpInBracketsAreSame() {}
-	void findLargestRectanglularAreaPossibleInAGivenHistogram() {}
-	void celebrityProblem() {}
-	void designCustomBrowserHistoryBasedOnGivenOperations() {}
-	void getMaxPeopleOneCanSeeWhileStandinInLineInBothDirections() {}
-	void getCountOfDistinctDifferencesBetweenTwoMaxElementsOfEverySubArray() {}
-	void getMaxOfMinForEveryWindowInArray() {}
-	void trappingRainWater() {}
-	void simplifyPath() {}
-	void buildBasicCalculator() {}
-	void buildMinStack() {}
-	void removeDuplicateLetters() {}
-	void createMaxNumber() {}
-	void miniParser() {}
-	void longestAbsoluteFilePath() {}
-	void decodeString() {}
-	void removeKStrings() {}
-	void ternaryExpressionParser() {}
-	void _132Pattern() {}
-	void findPermutation() {}
-	void zumaGame() {}
-	void shortestUnsoortedContinuousSubArray() {}
-	void tagValidator() {}
-	void baseballGame() {}
-	void createMaxStack() {}
-	void numberOfAtoms() {}
-	void asteroidCollision() {}
-	void parseLispExpression() {}
-	void dailyTemperatures() {}
-	void carFleet() {}
-	void scoreOfParanthesis() {}
-	void createMaxFrequencyStack() {}
-	void onlineStockPlan() {}
-	void sumOfSubArrayMinimums() {}
-	void miniimumAddToMakeParanthesisValid() {}
-	void stampingTheSequence() {}
-	void validateStackSequences() {}
-	void maxWidthRamp() {}
-	void removeOuterMostParanthesis() {}
-	void smallestSubSequenceOfDistinctCharacters() {}
-	void parsingABooleanExpression() {}
-	void dinnerPlateStacks() {}
-	void longestWellPerformingInterval() {}
-	void reverseSubstringsBetweenEachPairOfParantheses() {}
-	void minimumDeletionsToMakeArrayBeautiful() {}
-	void minimumRemoveToMakeValidParenthesis() {}
-	void finalPricesWithSpecialDiscountInAShop() {}
-	void countSubMatricesWithAllOnes() {}
-	void minNumberOfIncrementsOnSubArraysToFormmATargetArray() {}
-	void makeTheStringGreat() {}
-	void shortestSubArrayToBeRemovedToMakeArraySorted() {}
-	void crawlerLogFile() {}
-	void getNestingdepthOfParenthesis() {}
-	void findMostCompetetiveSubsequence() {}
-	void numberOfStudentsUnableToEatLunch() {}
-	void uildingWithAnOceanView() {}
-	void jumpGame() {}
-	void numberrOfWeakCharactersInTheGame() {}
-	void scoreOfStudentsSolvingMathExpression() {}
-	void replaceNonCoprimeNumbersInArray() {}
-	void countCollisionsOnTheRoad() {}
-	void sumOfTotalNumberOfWizards() {}
-	void designATextEditor() {}
-	void designVideoSharingPlatform() {}
+
+	int getNextGreaterElement(int * arr1, int * arr2, int size1, int size2) {
+		/*You are given two distinct 0-indexed integer arrays nums1 and nums2, where nums1 is a subset of nums2.
+		For each 0 <= i < nums1.length, find the index j such that nums1[i] == nums2[j] 
+		and determine the next greater element of nums2[j] in nums2. If there is no next
+		greater element, then the answer for this query is -1.*/
+		int i, j;
+		int matchValue;
+		bool stop = false;
+		for (i = 0; i < size1; i++) {
+			for (j = 0; j < size2; j++) {
+				if (arr1[i] == arr2[j]) {
+					matchValue = arr1[i];
+					stop = true;
+					break;
+				}
+			}
+			if (stop)
+				break;
+		}
+		for (i = 0; i < size2; i++) {
+			this->push(arr2[i]);
+		}
+		this->sortBubble('d');
+		int sortedIndex = this->searchLinear(matchValue);
+		if (sortedIndex == 0)
+			return(-1);
+		else
+			return(elements[sortedIndex - 1]);
+	}
+	std::string deleteConsecutiveSameWordsInSequence(std::string str) {
+		std::string newStr = "", word1 = "", word2="";
+		std::string::iterator itt;
+
+		for (std::string::iterator it = str.begin(); it != str.end(); ++it) {
+			if (*it != ' ') {
+				newStr += *it;
+				word1 += *it;
+			}
+			else {
+				for (itt = it + 1; itt != str.end(); ++itt) {
+					if (*itt == ' ')
+						break;
+					word2 += *itt;
+				}
+				if (word1.compare(word2) != 0) {
+					newStr += " ";
+					for (char& c : word2) {
+						newStr += c;
+					}
+				}
+				word1 = word2;
+				word2 = "";
+				it = itt - 1;
+			}
+		}
+		return newStr;
+	}
 };

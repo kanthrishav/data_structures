@@ -215,5 +215,18 @@ namespace STACK_T {
 			ASSERT_EQ(valSortedDescend[i], list->elements[i]);
 		}
 	}
+	TEST_F(STK, getNextGreaterElement) {
+		int const size = 9;
+		int val1[6] = { 4, 1, 0, 3, 6, 5 };
+		int val2[size] = { 5, 6, 2, 4, 1, 0, 3, 7, 9};
+		int i = list->getNextGreaterElement(val1, val2, 6, 9);
+		ASSERT_EQ(i, 5);
+	}
+	TEST_F(STK, deleteConsecutiveSameWordsInSequence) {
+		std::string str = "That guy works works as a postman in the day but also runs runs his shop at night.";
+		std::string newStr = list->deleteConsecutiveSameWordsInSequence(str);
+		std::string expectedStr = "That guy works as a postman in the day but also runs his shop at night.";
+		ASSERT_EQ(newStr, expectedStr);
+	}
 
 }
