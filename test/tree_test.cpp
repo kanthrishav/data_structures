@@ -209,4 +209,22 @@ namespace BST_T {
 		ASSERT_EQ(ptr1->left->right->info, val[6]);
 		ASSERT_EQ(ptr1->right->left->info, val[4]);
 	}
+	TEST_F(BST, findMin) {
+		int const size = 7;
+		int val[size] = { 5, 6, 2, 0, 1, 4, 3 };
+		int i;
+		for (i = 0; i < size; i++)
+			list->insertRecursive(val[i]);
+		int smallest = list->findSmallest();
+		ASSERT_EQ(smallest, 0);
+	}
+	TEST_F(BST, findMax) {
+		int const size = 7;
+		int val[size] = { 5, 6, 2, 0, 1, 4, 3 };
+		int i;
+		for (i = 0; i < size; i++)
+			list->insertRecursive(val[i]);
+		int largest = list->findLargest();
+		ASSERT_EQ(largest, 6);
+	}
 }

@@ -178,4 +178,22 @@ public:
 	void mirrorImage() {
 		reflect(root);
 	}
+	int findSmallest() {
+		return(findMin(root));
+	}
+	int findMin(BSTNode* tree) {
+		if ((tree == nullptr) || (tree->left == nullptr))
+			return tree->info;
+		else
+			return findMin(tree->left);
+	}
+	int findLargest() {
+		return(findMax(root));
+	}
+	int findMax(BSTNode* tree) {
+		if ((tree == nullptr) || (tree->right == nullptr))
+			return tree->info;
+		else
+			return findMax(tree->right);
+	}
 };
