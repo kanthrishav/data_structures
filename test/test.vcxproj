@@ -110,6 +110,7 @@
     </ClCompile>
     <ClCompile Include="queue_test.cpp" />
     <ClCompile Include="stack_test.cpp" />
+    <ClCompile Include="tree_test.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DSA\DSA.vcxproj">

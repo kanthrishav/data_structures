@@ -11,3 +11,4 @@
 #include "queue.h"
 #include "deque.h"
 #include "priority_queue.h"
+#include "tree.h"
