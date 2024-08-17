@@ -2,6 +2,8 @@
 #include <map>
 #include <vector>
 
+class StackLL {};
+
 class Stack {
 public:
 	int topIndex;

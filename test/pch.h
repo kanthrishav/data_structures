@@ -9,3 +9,5 @@
 #include "array.h"
 #include "stack.h"
 #include "queue.h"
+#include "deque.h"
+#include "priority_queue.h"

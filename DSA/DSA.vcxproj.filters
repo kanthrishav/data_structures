@@ -41,5 +41,11 @@
     <ClInclude Include="double_list.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="deque.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="priority_queue.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
