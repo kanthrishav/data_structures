@@ -228,3 +228,26 @@ namespace BST_T {
 		ASSERT_EQ(largest, 6);
 	}
 }
+
+namespace HEAP_T {
+	class MaxHP : public testing::Test {
+	public:
+		MaxHeap* list = new MaxHeap(100);
+		void SetUp() {
+			// pass
+		}
+		void TearDown() {
+			delete list;
+		}
+	};
+	TEST_F(MaxHP, insert_remove) {
+		int const size = 7;
+		int val[size] = { 5, 6, 2, 0, 1, 4, 3 };
+		int val2[size] = { 6, 5, 4, 3, 2, 1, 0 };
+		int i;
+		for (i = 0; i < size; i++)
+			list->insert(val[i]);
+		for (i = 0; i < size; i++)
+			ASSERT_EQ(list->remove(), val2[i]);
+	}
+}

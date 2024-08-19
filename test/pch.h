@@ -12,3 +12,5 @@
 #include "deque.h"
 #include "priority_queue.h"
 #include "tree.h"
+#include "heap.h"
+#include "graph.h"
